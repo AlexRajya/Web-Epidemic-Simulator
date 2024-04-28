@@ -1,14 +1,14 @@
 import { IImmigrant } from "./IImmigrant";
 
 export class Cell {
-    populationLimit: number;
-    susceptible: number;
+    populationLimit: number = 0;
+    susceptible: number = 0;
     incubated: number[] = []; //This array represents a queue
     infected: number[] = []; //This array represents a queue
     recovered: number = 0;
     susAway: number = 0;
     infAway: number = 0;
-    index_: number;
+    index_: number = 0;
 
     constructor(population: number, populationLimit: number, index: number) {
       this.populationLimit = populationLimit;
@@ -44,9 +44,9 @@ export class Cell {
     ReturnImmigrants(newInf: number){ //Simulate immigrants returning to origin cell
       //add newly infected to incubated queue
       if (this.incubated.length > 0){
-        this.incubated[(this.incubated.length - 1)] += newInf;
+        this.incubated[this.incubated.length - 1] += newInf;
       }else{
-        this.incubated[0] = newInf;
+        this.incubated.push(newInf);
       }
       this.susceptible -= newInf;
       if (this.susceptible < 0){
@@ -60,24 +60,25 @@ export class Cell {
       this.susceptible -=  Math.round(this.susceptible * prob);
       //Apply natural death prob to all in queue
       for (let i = 0; i < this.incubated.length; i++) {
-        this.incubated[i] -=  Math.round(this.incubated[i] * prob);
+        this.incubated[i] -= Math.round(this.incubated[i] * prob);
       }
       //Apply natural death prob to all in queue
       for (let i = 0; i < this.infected.length; i++) {
-        this.infected[i] -=  Math.round(this.infected[i] * prob);
+        this.infected[i] -= Math.round(this.infected[i] * prob);
       }
 
       this.recovered -= Math.round(this.recovered * prob);
     }
   
     SimVirusMorbidity(ageDist: number[], ageMort: number[]) { //Simulate deaths caused by virus
+      //TODO check if people can die while incubating? If not remove this loop
       for (let i = 0; i < this.incubated.length; i++) {
-        for (let j  = 0; i < ageMort.length; i++){
+        for (let j  = 0; j < ageMort.length; j++){
           this.incubated[i] -= Math.round(this.incubated[i]*ageDist[j]*ageMort[j]);
         }
       }
       for (let i = 0; i < this.infected.length; i++) {
-        for (let j  = 0; i < ageMort.length; i++){
+        for (let j  = 0; j < ageMort.length; j++){
           this.infected[i] -= Math.round(this.infected[i]*ageDist[j]*ageMort[j]);
         }
       }
@@ -107,7 +108,7 @@ export class Cell {
         //Calc infection prob using total inf + immigrants
         const percentageInfected = ((this.InfectedCount + immigrantsInf) - this.infAway)
                                 / ((this.PopulationCount + immigrantsPop) - this.susAway - this.infAway);
-  
+        
         let infectionProb = prob * percentageInfected;
         if (infectionProb < 0){
           infectionProb = 0;
@@ -144,9 +145,10 @@ export class Cell {
     
     SimRecoveries(infLength: number) { //Simulate recovering from virus
       if (this.infected.length > infLength){
-        const newRecovered = this.infected[0];
-        this.infected.shift();
-        this.recovered += newRecovered;
+        const newRecovered = this.infected.shift();
+        if(newRecovered){
+          this.recovered += newRecovered;
+        }
       }
     }
   }

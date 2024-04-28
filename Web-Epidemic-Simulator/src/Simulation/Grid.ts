@@ -38,6 +38,8 @@ export class Grid {
           this.largeCities.push(i);
         }
       }
+      
+      this.UpdateOverallCount();
     }
   
     get RowsCount(){return this.rows;}
