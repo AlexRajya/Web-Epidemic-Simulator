@@ -1,7 +1,7 @@
 import { Cell } from "./Cell";
 import { Configuration } from "./Configuration";
 import { cellsPopulation } from "./Data/GermanyPopulationDensity";
-import { ConvertTo2DArray } from "./Helpers/Get2DArray";
+import { ConvertTo2DArray } from "./Helpers/ConvertTo2DArray";
 import { IImmigrant } from "./IImmigrant";
 
 export class Grid {
