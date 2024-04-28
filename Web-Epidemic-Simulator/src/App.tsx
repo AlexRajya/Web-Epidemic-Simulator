@@ -1,33 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { Grid } from './Simulation/Grid';
+import { Configuration } from './Simulation/Configuration';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [grid, setGrid] = useState<Grid>(new Grid());
+  const [populationCount, setPopulationCount] = useState<number>(grid.PopulationOverallCount);
+  const [susceptibleCount, setSusceptibleCount] = useState<number>(grid.SusceptibleOverallCount);
+  const [incubatedCount, setIncubatedCount] = useState<number>(grid.IncubatedOverallCount);
+  const [infectedCount, setInfectedCount] = useState<number>(grid.InfectedOverallCount);
+  const [recoveredCount, setRecoveredCount] = useState<number>(grid.RecoveredOverallCount);
+  const [config] = useState<Configuration>(new Configuration());
+
+  useEffect(() => {
+    const startGrid = new Grid();
+    startGrid.SetAsInfected(1001);
+    setGrid(startGrid);
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+      <button onClick={() => {
+          grid.Next(config);
+          setPopulationCount(grid.PopulationOverallCount);
+          setSusceptibleCount(grid.SusceptibleOverallCount);
+          setInfectedCount(grid.InfectedOverallCount);
+          setIncubatedCount(grid.IncubatedOverallCount);
+          setRecoveredCount(grid.RecoveredOverallCount);
+        }
+      }>
+        Next day
+      </button>
+      <p>
+        Total population: {populationCount}
       </p>
+      <p>
+        Total susceptible: {susceptibleCount}
+      </p>
+      <p>
+        Total incubating: {incubatedCount}
+      </p>
+      <p>
+        Total infected: {infectedCount}
+      </p>
+      <p>
+        Total recovered: {recoveredCount}
+      </p>
+      <button onClick={() => {
+        setGrid(new Grid())}
+        }>
+        Reset
+      </button>
     </>
   )
 }
