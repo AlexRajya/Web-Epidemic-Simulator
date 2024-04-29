@@ -3,5 +3,5 @@ export interface IImmigrant {
     neigh: number,
     susPop: number,
     infPop: number,
-    newInf: 0
+    newInf: number
   }
