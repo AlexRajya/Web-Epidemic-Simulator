@@ -1,8 +1,13 @@
-//Configuration class
+export enum Preset {
+  COVID_19,
+  INFLUENZA,
+  COVID_19_MASKS,
+  COVID_19_LOCKDOWN
+}
 
+//Configuration class
 export class Configuration {
-    //TODO: convert preset to enum
-    constructor(preset: number = 1){
+    constructor(preset: Preset = Preset.COVID_19){
       this.loadPredefinedSettings(preset);
     }
 
@@ -26,8 +31,8 @@ export class Configuration {
     get infPeriod(){return this.infPeriod_;}
     get illImmigrationRate(){return this.illImmigrationRate_;}
   
-    loadPredefinedSettings(id: number){ //Load preset
-      if (id == 1) { //COVID-19
+    loadPredefinedSettings(id: Preset){ //Load preset
+      if (id == Preset.COVID_19) { //COVID-19
         this.immigrationRate_ = 0.5;
         this.birthRate_ = 0.0001;
         this.naturalDeathRate_ = 0.0001;
@@ -57,7 +62,7 @@ export class Configuration {
         this.contactInfectionRate_ = 0.4;
         this.infPeriod_ = 9;
         this.illImmigrationRate_ = 0.15;
-      }else if (id == 2) { //Influenza
+      }else if (id == Preset.INFLUENZA) { //Influenza
         this.immigrationRate_ = 0.5;
         this.birthRate_ = 0.0001;
         this.naturalDeathRate_ = 0.0001;
@@ -87,7 +92,7 @@ export class Configuration {
         this.contactInfectionRate_ = 0.35;
         this.infPeriod_ = 4;
         this.illImmigrationRate_ = 0.15;
-      }else if (id == 3) { //COVID-19 Lockdown
+      }else if (id == Preset.COVID_19_LOCKDOWN) { //COVID-19 Lockdown
         this.immigrationRate_ = 0.05;
         this.birthRate_ = 0.0001;
         this.naturalDeathRate_ = 0.0001;
@@ -117,7 +122,7 @@ export class Configuration {
         this.contactInfectionRate_ = 0.35;
         this.infPeriod_ = 9;
         this.illImmigrationRate_ = 0.01;
-      }else if (id == 4) { //COVID-19 Masks
+      }else if (id == Preset.COVID_19_MASKS) { //COVID-19 Masks
         this.immigrationRate_ = 0.5;
         this.birthRate_ = 0.0001;
         this.naturalDeathRate_ = 0.0001;
