@@ -41,10 +41,13 @@ function App() {
   return (
     <div style={{display: "flex"}}>
       <div style={{width: "600px"}}>
-        {ConvertTo2DArray(grid.cells).map((rowOfCells) => 
-          <div style={{display: 'flex'}}>
+        {ConvertTo2DArray(grid.cells).map((rowOfCells, index) => 
+          <div style={{display: 'flex'}} key={"row-" + index}>
             {rowOfCells.map((cell) => 
-              <div style={{ backgroundColor: cellColour(cell), border: "1px solid black", width: "10px", height: "10px"}} /> 
+              <div 
+                style={{ backgroundColor: cellColour(cell), border: "1px solid black", width: "10px", height: "10px"}} 
+                key={"cell-" + cell.Index}
+              /> 
             )}
           </div>
         )}
