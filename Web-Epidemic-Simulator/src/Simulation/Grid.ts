@@ -38,7 +38,7 @@ export class Grid {
           this.largeCities.push(i);
         }
       }
-      
+  
       this.UpdateOverallCount();
     }
   
@@ -227,19 +227,21 @@ export class Grid {
     Next(config: Configuration) { //Step the simulation forward (1 day)
       this.SimImmigrations(config);
       // Simulates natural deaths, deaths caused by the virus and new births.
-      for(let i = 0; i < this.cellsCount; i++) {
-        this.cells[i].SimNaturalDeaths(config.naturalDeathRate);
-        this.cells[i].SimVirusMorbidity(config.ageDist, config.ageMort);
-        this.cells[i].SimBirths(config.birthRate);
+      this.cells.forEach((cell, index) => {
+        cell.SimNaturalDeaths(config.naturalDeathRate);
+        cell.SimVirusMorbidity(config.ageDist, config.ageMort);
+        cell.SimBirths(config.birthRate);
         //update immigrants list with updated infectious/recovered immigrants
-        this.immigrants = this.cells[i].SimInfections(config.contactInfectionRate, config.incPeriod, i, this.immigrants);
-      }
+        this.immigrants = cell.SimInfections(config.contactInfectionRate, config.incPeriod, index, this.immigrants);
+      });
   
       //return immigrants to original cells
       this.SimReturnImmigrations();
-      for(let i = 0; i < this.cellsCount; i++) {
-        this.cells[i].SimRecoveries(config.infPeriod);
-      }
+
+      this.cells.forEach((cell) => {
+        cell.SimRecoveries(config.infPeriod);
+      });
+      
       this.UpdateOverallCount();
     }
   }
