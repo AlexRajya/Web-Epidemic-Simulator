@@ -91,12 +91,14 @@ export class Cell {
       //Get counts from immigrants
       let immigrantsInf = 0;
       let immigrantsSus = 0;
-      for (let i = 0; i < immigrants.length; i++){
-        if (immigrants[i].neigh == index){
-          immigrantsInf += immigrants[i].infPop;
-          immigrantsSus += immigrants[i].susPop;
+
+      immigrants.forEach((immigrant) => {
+        if (immigrant.neigh == index){
+          immigrantsInf += immigrant.infPop;
+          immigrantsSus += immigrant.susPop;
         }
-      }
+      })
+
       const immigrantsPop = immigrantsInf+immigrantsSus;
   
       if (this.PopulationCount > 0){
@@ -128,12 +130,12 @@ export class Cell {
         }
   
         //Sim immigrants becoming infected
-        for (let i = 0; i < immigrants.length; i++){
-          if (immigrants[i].neigh == index){
-            newIncubated = Math.round(immigrants[i].susPop * infectionProb);
-            immigrants[i].newInf += newIncubated;
+        immigrants.forEach((immigrant) => {
+          if (immigrant.neigh == index){
+            newIncubated = Math.round(immigrant.susPop * infectionProb);
+            immigrant.newInf += newIncubated;
           }
-        }
+        });
       }
       return immigrants;
     }
