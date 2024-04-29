@@ -71,12 +71,6 @@ export class Cell {
     }
   
     SimVirusMorbidity(ageDist: number[], ageMort: number[]) { //Simulate deaths caused by virus
-      //TODO check if people can die while incubating? If not remove this loop
-      for (let i = 0; i < this.incubated.length; i++) {
-        for (let j  = 0; j < ageMort.length; j++){
-          this.incubated[i] -= Math.round(this.incubated[i]*ageDist[j]*ageMort[j]);
-        }
-      }
       for (let i = 0; i < this.infected.length; i++) {
         for (let j  = 0; j < ageMort.length; j++){
           this.infected[i] -= Math.round(this.infected[i]*ageDist[j]*ageMort[j]);
