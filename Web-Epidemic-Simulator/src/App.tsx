@@ -38,6 +38,14 @@ function App() {
       return colour
   }
 
+  const updateCounts = (newGrid: Grid): void => {
+    setPopulationCount(newGrid.PopulationOverallCount);
+    setSusceptibleCount(newGrid.SusceptibleOverallCount);
+    setInfectedCount(newGrid.InfectedOverallCount);
+    setIncubatedCount(newGrid.IncubatedOverallCount);
+    setRecoveredCount(newGrid.RecoveredOverallCount);
+  }
+
   return (
     <div style={{display: "flex"}}>
       <div style={{width: "600px"}}>
@@ -55,11 +63,7 @@ function App() {
       <div style={{width: "300px"}}>
         <button onClick={() => {
             grid.Next(config);
-            setPopulationCount(grid.PopulationOverallCount);
-            setSusceptibleCount(grid.SusceptibleOverallCount);
-            setInfectedCount(grid.InfectedOverallCount);
-            setIncubatedCount(grid.IncubatedOverallCount);
-            setRecoveredCount(grid.RecoveredOverallCount);
+            updateCounts(grid);
           }
         }>
           Next day
@@ -81,11 +85,7 @@ function App() {
         </p>
         <button onClick={() => {
             const startGrid = new Grid();
-            setPopulationCount(startGrid.PopulationOverallCount);
-            setSusceptibleCount(startGrid.SusceptibleOverallCount);
-            setInfectedCount(startGrid.InfectedOverallCount);
-            setIncubatedCount(startGrid.IncubatedOverallCount);
-            setRecoveredCount(startGrid.RecoveredOverallCount);
+            updateCounts(startGrid);
             setGrid(startGrid);
             startGrid.SetAsInfected(1001);
           } 
