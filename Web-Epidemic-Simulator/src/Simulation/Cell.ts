@@ -41,14 +41,15 @@ export class Cell {
       return [toMoveInf, toMoveSus];
     }
   
-    ReturnImmigrants(newInf: number){ //Simulate immigrants returning to origin cell
+    ReturnImmigrants(newInfected: number){ //Simulate immigrants returning to origin cell
       //add newly infected to incubated queue
       if (this.incubated.length > 0){
-        this.incubated[this.incubated.length - 1] += newInf;
+        this.incubated[this.incubated.length - 1] += newInfected;
       }else{
-        this.incubated.push(newInf);
+        this.incubated.push(newInfected);
       }
-      this.susceptible -= newInf;
+
+      this.susceptible -= newInfected;
       if (this.susceptible < 0){
         this.susceptible = 0;//Rounding may cause negative in rare cases
       }
@@ -56,18 +57,18 @@ export class Cell {
       this.infAway = 0;
     }
   
-    SimNaturalDeaths(prob: number) { //Simulate natural deaths
-      this.susceptible -=  Math.round(this.susceptible * prob);
+    SimNaturalDeaths(probOfNaturalDeath: number) { //Simulate natural deaths
+      this.susceptible -=  Math.round(this.susceptible * probOfNaturalDeath);
       //Apply natural death prob to all in queue
       for (let i = 0; i < this.incubated.length; i++) {
-        this.incubated[i] -= Math.round(this.incubated[i] * prob);
+        this.incubated[i] -= Math.round(this.incubated[i] * probOfNaturalDeath);
       }
       //Apply natural death prob to all in queue
       for (let i = 0; i < this.infected.length; i++) {
-        this.infected[i] -= Math.round(this.infected[i] * prob);
+        this.infected[i] -= Math.round(this.infected[i] * probOfNaturalDeath);
       }
 
-      this.recovered -= Math.round(this.recovered * prob);
+      this.recovered -= Math.round(this.recovered * probOfNaturalDeath);
     }
   
     SimVirusMorbidity(ageDist: number[], ageMort: number[]) { //Simulate deaths caused by virus
@@ -86,7 +87,7 @@ export class Cell {
       this.susceptible += newBorns;
     }
   
-    SimInfections(prob: number, incPeriod: number, index: number, immigrants: IImmigrant[]){ //Sim new infections
+    SimInfections(probOfCatchingInfection: number, incPeriod: number, index: number, immigrants: IImmigrant[]){ //Sim new infections
       //Get counts from immigrants
       let immigrantsInf = 0;
       let immigrantsSus = 0;
@@ -103,7 +104,7 @@ export class Cell {
         const percentageInfected = ((this.InfectedCount + immigrantsInf) - this.infAway)
                                 / ((this.PopulationCount + immigrantsPop) - this.susAway - this.infAway);
         
-        let infectionProb = prob * percentageInfected;
+        let infectionProb = probOfCatchingInfection * percentageInfected;
         if (infectionProb < 0){
           infectionProb = 0;
         }else if (infectionProb > 1){
@@ -137,8 +138,8 @@ export class Cell {
       return immigrants;
     }
     
-    SimRecoveries(infLength: number) { //Simulate recovering from virus
-      if (this.infected.length > infLength){
+    SimRecoveries(infectionLifespan: number) { //Simulate recovering from virus
+      if (this.infected.length > infectionLifespan){
         const newRecovered = this.infected.shift();
         if(newRecovered){
           this.recovered += newRecovered;
