@@ -18,7 +18,7 @@ export class Grid {
     incubatedCount: number = 0;
     infectedCount: number = 0;
     recoveredCount: number = 0;
-    nearestCities: number[] = [];
+    nearestCities: (number | undefined)[] = [];
     immigrants: IImmigrant[] = [];
     largeCities: number[] = [];
 
@@ -37,7 +37,7 @@ export class Grid {
       //find nearest city over population 50000 for every cell
       for (let i = 0; i < this.cellsCount; i++){
         const nearCity = this.FindClosestBigCity(i);
-        if(nearCity !== undefined) this.nearestCities.push(nearCity);
+        this.nearestCities.push(nearCity);
       }
   
       //find all large Cities
@@ -134,10 +134,11 @@ export class Grid {
         return index
       }else{
         const bigCities = [];
-        const twoD = ConvertTo2DArray(this.cells);
+        const twoD = ConvertTo2DArray(this.cells, this.RowsCount);
         let row;
   
         //find big cities
+        //TODO - can be optimised by storing big cities in a list and updating when a new big city is added
         for (let i = 0; i < twoD.length; i++){
           row = twoD[i];
           for (let j = 0; j < row.length; j++){
@@ -154,7 +155,7 @@ export class Grid {
         for (let i = 0; i < twoD.length; i++){
           row = twoD[i];
           for (let j = 0; j < row.length; j++){
-            if(row[j] == this.cells[index]){
+            if(row[j].Index == this.cells[index].Index){
               xy.push(j);//x
               xy.push(i);//y
             }
@@ -194,8 +195,12 @@ export class Grid {
       for (let i = 0; i < this.cells.length; i++){
         if (this.cells[i].PopulationCount > 0){
           const neighbours = this.GetNeighbours(i);
-          //nearest big city for cell at index I
-          neighbours.push(this.nearestCities[i]);
+          
+          //nearest big city for cell at index
+          const nearestCity = this.nearestCities[i]
+          if(nearestCity !== undefined) {
+            neighbours.push(nearestCity)
+          }
   
           //random big city
           if (randomCells.includes(i)){

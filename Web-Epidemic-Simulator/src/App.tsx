@@ -51,7 +51,7 @@ function App() {
   return (
     <div style={{display: "flex"}}>
       <div style={{width: "600px"}}>
-        {ConvertTo2DArray(grid.cells).map((rowOfCells, index) => 
+        {ConvertTo2DArray(grid.cells, rows).map((rowOfCells, index) => 
           <div style={{display: 'flex'}} key={"row-" + index}>
             {rowOfCells.map((cell) => 
               <div 

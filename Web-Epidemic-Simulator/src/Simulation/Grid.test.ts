@@ -81,4 +81,46 @@ describe('Grid', () => {
       expect(neighbours).toEqual([]);
     });
   });
+
+  describe('FindClosestBigCity', () => {
+    it('should return the index of the closest big city', () => {
+      const grid = new Grid(3, 3, [10000, 20000, 30000, 40000, 50000, 60000, 10000, 80000, 10000]);
+
+      // Test case 1: index = 0 (top-left corner)
+      let closestBigCityIndex = grid.FindClosestBigCity(0);
+      expect(closestBigCityIndex).toBe(4);
+
+      // Test case 2: index = 4 (center)
+      closestBigCityIndex = grid.FindClosestBigCity(4);
+      expect(closestBigCityIndex).toBe(4); //Is a big city
+
+      // Test case 3: index = 8 (bottom-right corner)
+      closestBigCityIndex = grid.FindClosestBigCity(8);
+      expect(closestBigCityIndex).toBe(5);
+
+      // Test case 4: index = 1 (top edge)
+      closestBigCityIndex = grid.FindClosestBigCity(1);
+      expect(closestBigCityIndex).toBe(4);
+
+      // Test case 5: index = 7 (bottom edge)
+      closestBigCityIndex = grid.FindClosestBigCity(7);
+      expect(closestBigCityIndex).toBe(7);
+
+      // Test case 6: index = 3 (left edge)
+      closestBigCityIndex = grid.FindClosestBigCity(3);
+      expect(closestBigCityIndex).toBe(4);
+
+      // Test case 7: index = 5 (right edge)
+      closestBigCityIndex = grid.FindClosestBigCity(5);
+      expect(closestBigCityIndex).toBe(5);
+    });
+
+    it('should return undefined if no big cities exist', () => {
+      const grid = new Grid(2, 2, [10000, 20000, 30000, 40000]);
+
+      // Test case: index = 0 (top-left corner)
+      const closestBigCityIndex = grid.FindClosestBigCity(0);
+      expect(closestBigCityIndex).toBeUndefined();
+    });
+  });
 });
