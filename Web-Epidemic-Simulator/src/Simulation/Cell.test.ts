@@ -222,3 +222,37 @@ describe('SimInfections tests', () => {
         expect(cell.infected).toEqual([]);
     });
 });
+
+describe('SimRecoveries tests', () => {
+    test('It should simulate recoveries and update the recovered count', () => {
+        const cell = new Cell(100, 1000, 1);
+        cell.infected = [10, 20, 30];
+        const infectionLifespan = 2;
+
+        cell.SimRecoveries(infectionLifespan);
+
+        expect(cell.infected).toEqual([20, 30]);
+        expect(cell.recovered).toBe(10);
+    });
+
+    test('It should not update the recovered count if there are no infected individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        const infectionLifespan = 2;
+
+        cell.SimRecoveries(infectionLifespan);
+
+        expect(cell.infected).toEqual([]);
+        expect(cell.recovered).toBe(0);
+    });
+
+    test('It should not update the recovered count if the infection lifespan is greater than the number of infected individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        cell.infected = [10, 20, 30];
+        const infectionLifespan = 4;
+
+        cell.SimRecoveries(infectionLifespan);
+
+        expect(cell.infected).toEqual([10, 20, 30]);
+        expect(cell.recovered).toBe(0);
+    });
+});
