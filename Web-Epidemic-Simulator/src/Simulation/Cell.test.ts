@@ -101,3 +101,79 @@ describe('ReturnImmigrants tests', () => {
         expect(cell.susAway).toBe(0);
     });
 });
+
+describe('SimNaturalDeaths tests', () => {
+    test('It should simulate natural deaths for susceptible individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        const probOfNaturalDeath = 0.1;
+
+        cell.SimNaturalDeaths(probOfNaturalDeath);
+
+        expect(cell.susceptible).toBe(90);
+    });
+
+    test('It should simulate natural deaths for incubated individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        const probOfNaturalDeath = 0.1;
+        cell.incubated.push(5);
+        cell.incubated.push(10);
+
+        cell.SimNaturalDeaths(probOfNaturalDeath);
+
+        expect(cell.incubated).toEqual([4, 9]);
+    });
+
+    test('It should simulate natural deaths for infected individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        const probOfNaturalDeath = 0.1;
+        cell.infected.push(5);
+        cell.infected.push(10);
+
+        cell.SimNaturalDeaths(probOfNaturalDeath);
+
+        expect(cell.infected).toEqual([4, 9]);
+    });
+
+    test('It should simulate natural deaths for recovered individuals', () => {
+        const cell = new Cell(100, 1000, 1);
+        const probOfNaturalDeath = 0.1;
+        cell.recovered = 10;
+
+        cell.SimNaturalDeaths(probOfNaturalDeath);
+
+        expect(cell.recovered).toBe(9);
+    });
+});
+
+describe('SimVirusMorbidity tests', () => {
+    test('It should simulate deaths caused by the virus', () => {
+        const cell = new Cell(100, 1000, 1);
+        const ageDist = [0.2, 0.3, 0.5];
+        const ageMort = [0.1, 0.2, 0.3];
+        cell.infected = [10, 20, 30];
+
+        cell.SimVirusMorbidity(ageDist, ageMort);
+
+        expect(cell.infected).toEqual([8, 16, 23]);
+    });
+});
+
+describe('SimBirths tests', () => {
+    test('It should simulate natural births and increase the susceptible count', () => {
+        const cell = new Cell(100, 1000, 1);
+        const prob = 0.1;
+
+        cell.SimBirths(prob);
+
+        expect(cell.susceptible).toBe(110);
+    });
+
+    test('It should not simulate natural births if the population exceeds the limit', () => {
+        const cell = new Cell(100, 100, 1);
+        const prob = 0.1;
+
+        cell.SimBirths(prob);
+
+        expect(cell.susceptible).toBe(100);
+    });
+});
