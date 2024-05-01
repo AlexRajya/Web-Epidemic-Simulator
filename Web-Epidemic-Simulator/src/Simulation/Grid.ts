@@ -8,8 +8,8 @@ import { IImmigrant } from "./IImmigrant";
  * Represents a grid in the simulation.
  */
 export class Grid {
-    rows: number = 36;
-    cols: number = 36;
+    rows: number;
+    cols: number;
     cellsCount: number;
     cells: Cell[];
     //rename these to totalX
@@ -24,6 +24,8 @@ export class Grid {
 
     constructor(rows: number, cols: number, cellsStartPopulations: number[]) {
       this.cellsCount = rows * cols;
+      this.rows = rows;
+      this.cols = cols;
       if(cellsStartPopulations.length != this.cellsCount) throw new Error("Invalid population data provided")
 
       this.cells = new Array(this.cellsCount);
