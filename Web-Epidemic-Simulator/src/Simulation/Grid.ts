@@ -34,7 +34,8 @@ export class Grid {
   
       //find nearest city over population 50000 for every cell
       for (let i = 0; i < this.cellsCount; i++){
-        this.nearestCities.push(this.FindClosestBigCity(i));
+        const nearCity = this.FindClosestBigCity(i);
+        if(nearCity !== undefined) this.nearestCities.push(nearCity);
       }
   
       //find all large Cities
@@ -246,7 +247,8 @@ export class Grid {
   
       //find nearest city over population 50000 for every cell
       for (let i = 0; i < this.cellsCount; i++){
-        this.nearestCities.push(this.FindClosestBigCity(i));
+        const nearCity = this.FindClosestBigCity(i);
+        if(nearCity !== undefined) this.nearestCities.push(nearCity);
       }
       this.UpdateOverallCount();
     }
