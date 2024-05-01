@@ -143,6 +143,8 @@ export class Grid {
             }
           }
         }
+
+        if(bigCities.length == 0) return;
   
         //find XY of current cell
         const xy = [];
