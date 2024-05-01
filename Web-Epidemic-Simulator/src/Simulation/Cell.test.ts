@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { Cell } from './Cell';
+import { IImmigrant } from './IImmigrant';
 
 describe('GetPopulationCount tests', () => {
     test('It should take into account all stages in the count', () => {
@@ -175,5 +176,49 @@ describe('SimBirths tests', () => {
         cell.SimBirths(prob);
 
         expect(cell.susceptible).toBe(100);
+    });
+});
+
+describe('SimInfections tests', () => {
+    test('It should simulate new infections and update the population counts', () => {
+        const cell = new Cell(100, 1000, 1);
+        const probOfCatchingInfection = 0.9;
+        const incPeriod = 3;
+        const index = 1;
+        const immigrants: IImmigrant[] = [
+            { neigh: 1, infPop: 5, susPop: 10, newInf: 1, origin: 0 },
+            { neigh: 2, infPop: 3, susPop: 8, newInf: 0, origin: 0 },
+            { neigh: 1, infPop: 2, susPop: 5, newInf: 0, origin: 0 }
+        ];
+
+        const updatedImmigrants = cell.SimInfections(probOfCatchingInfection, incPeriod, index, immigrants);
+
+        expect(updatedImmigrants).toEqual([
+            { neigh: 1, infPop: 5, susPop: 10, newInf: 2, origin: 0 },
+            { neigh: 2, infPop: 3, susPop: 8, newInf: 0, origin: 0 },
+            { neigh: 1, infPop: 2, susPop: 5, newInf: 0, origin: 0 }
+        ]);
+        expect(cell.incubated).toEqual([5]);
+        expect(cell.susceptible).toBe(95);
+        expect(cell.infected).toEqual([0]);
+    });
+
+    test('It should handle cases where the population count is 0', () => {
+        const cell = new Cell(0, 1000, 1);
+        const probOfCatchingInfection = 0.2;
+        const incPeriod = 3;
+        const index = 1;
+        const immigrants: IImmigrant[] = [
+            { neigh: 1, infPop: 5, susPop: 10, newInf: 0, origin: 0},
+            { neigh: 2, infPop: 3, susPop: 8, newInf: 0, origin: 0 },
+            { neigh: 1, infPop: 2, susPop: 5, newInf: 0, origin: 0 }
+        ];
+
+        const updatedImmigrants = cell.SimInfections(probOfCatchingInfection, incPeriod, index, immigrants);
+
+        expect(updatedImmigrants).toEqual(immigrants);
+        expect(cell.incubated).toEqual([]);
+        expect(cell.susceptible).toBe(0);
+        expect(cell.infected).toEqual([]);
     });
 });
