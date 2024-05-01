@@ -4,9 +4,11 @@ import { Grid } from './Simulation/Grid';
 import { Configuration } from './Simulation/Configuration';
 import { ConvertTo2DArray } from './Simulation/Helpers/ConvertTo2DArray';
 import { Cell } from './Simulation/Cell';
+import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
 
 function App() {
-  const [grid, setGrid] = useState<Grid>(new Grid());
+  const cols = 36, rows = 36;
+  const [grid, setGrid] = useState<Grid>(new Grid(rows, cols, cellsPopulation));
   const [populationCount, setPopulationCount] = useState<number>(grid.PopulationOverallCount);
   const [susceptibleCount, setSusceptibleCount] = useState<number>(grid.SusceptibleOverallCount);
   const [incubatedCount, setIncubatedCount] = useState<number>(grid.IncubatedOverallCount);
@@ -15,7 +17,7 @@ function App() {
   const [config] = useState<Configuration>(new Configuration());
 
   useEffect(() => {
-    const startGrid = new Grid();
+    const startGrid = new Grid(rows, cols, cellsPopulation);
     startGrid.SetAsInfected(1001);
     setGrid(startGrid);
   }, []);
@@ -84,7 +86,7 @@ function App() {
           Total recovered: {recoveredCount}
         </p>
         <button onClick={() => {
-            const startGrid = new Grid();
+            const startGrid = new Grid(rows, cols, cellsPopulation);
             updateCounts(startGrid);
             setGrid(startGrid);
             startGrid.SetAsInfected(1001);

@@ -1,6 +1,6 @@
 import { Cell } from "./Cell";
 import { Configuration } from "./Configuration";
-import { cellsPopulation } from "./Data/GermanyPopulationDensity";
+
 import { ConvertTo2DArray } from "./Helpers/ConvertTo2DArray";
 import { IImmigrant } from "./IImmigrant";
 
@@ -22,12 +22,14 @@ export class Grid {
     immigrants: IImmigrant[] = [];
     largeCities: number[] = [];
 
-    constructor() {
-      this.cellsCount = this.RowsCount * this.ColsCount;
+    constructor(rows: number, cols: number, cellsStartPopulations: number[]) {
+      this.cellsCount = rows * cols;
+      if(cellsStartPopulations.length != this.cellsCount) throw new Error("Invalid population data provided")
+
       this.cells = new Array(this.cellsCount);
       // Assign population to each cell
       for(let i = 0; i < this.cellsCount; i++) {
-        this.cells[i] = new Cell(cellsPopulation[i], cellsPopulation[i] * 2.5, i);
+        this.cells[i] = new Cell(cellsStartPopulations[i], cellsStartPopulations[i] * 2.5, i);
       }
   
       //find nearest city over population 50000 for every cell
@@ -232,8 +234,9 @@ export class Grid {
     /**
      * Resets the grid by creating new cells and finding the nearest city for each cell.
      * Also updates the overall count.
+     * DEVNOTE: Currently unused.
      */
-    ResetCells() {
+    ResetCells(cellsPopulation: number[]) {
       this.cells = new Array(this.cellsCount);
       for(let i = 0; i < this.cellsCount; i++) {
         this.cells[i] = new Cell(cellsPopulation[i], cellsPopulation[i] * 2.5, i);
