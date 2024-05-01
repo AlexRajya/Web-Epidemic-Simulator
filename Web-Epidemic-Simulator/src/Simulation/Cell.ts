@@ -1,5 +1,9 @@
 import { IImmigrant } from "./IImmigrant";
 
+/**
+ * Represents a cell in the simulation.
+ * A cell represents a single location in the simulation grid with a population in various stages of infection.
+ */
 export class Cell {
     populationLimit: number = 0;
     susceptible: number = 0;
@@ -27,10 +31,20 @@ export class Cell {
     get RecoveredCount() {return Math.round(this.recovered);}
     get Index() {return this.index_;}
   
+    /**
+     * Adds a value to the infected queue.
+     * @param val - The value to add to the infected queue.
+     */
     AddInfected(val: number) {
       this.infected.push(val);//Add to infected queue
     }
   
+    /**
+     * Calculates the number of immigrants to be moved from the current cell.
+     * @param immigrationRate - The rate of immigration for susceptible individuals.
+     * @param illImmigrationRate - The rate of immigration for infected individuals.
+     * @returns An array containing the number of infected and susceptible individuals to be moved.
+     */
     GetImmigrants(immigrationRate: number, illImmigrationRate: number) {
       const toMoveInf = this.InfectedCount * illImmigrationRate;
       this.infAway = Math.floor(toMoveInf);
@@ -41,7 +55,11 @@ export class Cell {
       return [toMoveInf, toMoveSus];
     }
   
-    ReturnImmigrants(newInfected: number){ //Simulate immigrants returning to origin cell
+    /**
+     * Adds newly infected individuals to the incubated queue and updates the susceptible, susAway, and infAway properties.
+     * @param newInfected - The number of newly infected individuals to add to the incubated queue.
+     */
+    ReturnImmigrants(newInfected: number) {
       //add newly infected to incubated queue
       if (this.incubated.length > 0){
         this.incubated[this.incubated.length - 1] += newInfected;
@@ -57,7 +75,11 @@ export class Cell {
       this.infAway = 0;
     }
   
-    SimNaturalDeaths(probOfNaturalDeath: number) { //Simulate natural deaths
+    /**
+     * Simulates natural deaths in the cell population based on the given probability.
+     * @param probOfNaturalDeath - The probability of natural death.
+     */
+    SimNaturalDeaths(probOfNaturalDeath: number) {
       this.susceptible -=  Math.round(this.susceptible * probOfNaturalDeath);
       //Apply natural death prob to all in queue
       for (let i = 0; i < this.incubated.length; i++) {
@@ -71,7 +93,12 @@ export class Cell {
       this.recovered -= Math.round(this.recovered * probOfNaturalDeath);
     }
   
-    SimVirusMorbidity(ageDist: number[], ageMort: number[]) { //Simulate deaths caused by virus
+    /**
+     * Simulates deaths caused by the virus based on age distribution and mortality rates.
+     * @param ageDist - An array representing the age distribution.
+     * @param ageMort - An array representing the mortality rates for each age group.
+     */
+    SimVirusMorbidity(ageDist: number[], ageMort: number[]) { 
       for (let i = 0; i < this.infected.length; i++) {
         for (let j  = 0; j < ageMort.length; j++){
           this.infected[i] -= Math.round(this.infected[i]*ageDist[j]*ageMort[j]);
@@ -79,7 +106,11 @@ export class Cell {
       }
     }
   
-    SimBirths(prob: number) { //Simulate natural births
+    /**
+     * Simulates natural births in the cell.
+     * @param prob - The probability of a birth occurring.
+     */
+    SimBirths(prob: number) {
       let newBorns = Math.round(this.PopulationCount * prob);
       if(this.PopulationCount + newBorns > this.populationLimit) {
         newBorns = 0;
@@ -87,7 +118,15 @@ export class Cell {
       this.susceptible += newBorns;
     }
   
-    SimInfections(probOfCatchingInfection: number, incPeriod: number, index: number, immigrants: IImmigrant[]){ //Sim new infections
+    /**
+     * Simulates new infections in the cell.
+     * @param probOfCatchingInfection - The probability of catching an infection.
+     * @param incPeriod - The incubation period for the infection.
+     * @param index - The index of the cell.
+     * @param immigrants - An array of immigrants.
+     * @returns An array of immigrants.
+     */
+    SimInfections(probOfCatchingInfection: number, incPeriod: number, index: number, immigrants: IImmigrant[]){
       //Get counts from immigrants
       let immigrantsInf = 0;
       let immigrantsSus = 0;
@@ -140,7 +179,11 @@ export class Cell {
       return immigrants;
     }
     
-    SimRecoveries(infectionLifespan: number) { //Simulate recovering from virus
+    /**
+     * Simulates recovering from the virus.
+     * @param infectionLifespan - The lifespan of the infection.
+     */
+    SimRecoveries(infectionLifespan: number) {
       if (this.infected.length > infectionLifespan){
         const newRecovered = this.infected.shift();
         if(newRecovered){
