@@ -4,6 +4,9 @@ import { cellsPopulation } from "./Data/GermanyPopulationDensity";
 import { ConvertTo2DArray } from "./Helpers/ConvertTo2DArray";
 import { IImmigrant } from "./IImmigrant";
 
+/**
+ * Represents a grid in the simulation.
+ */
 export class Grid {
     rows: number = 36;
     cols: number = 36;
@@ -51,7 +54,10 @@ export class Grid {
     get RecoveredOverallCount(){return this.recoveredCount;}
     get SusceptibleOverallCount(){return this.susceptibleCount;}
   
-    UpdateOverallCount(){//Get total count from all cells
+    /**
+     * Updates the overall count of population, incubated, infected, and recovered individuals in the grid.
+     */
+    UpdateOverallCount(){
       //reset counts
       this.populationCount = 0;
       this.incubatedCount = 0;
@@ -65,7 +71,12 @@ export class Grid {
       }
     }
   
-    GetNeighbours(index: number){//Find neighbours of cell at index
+    /**
+     * Retrieves the populated neighbors of a cell at the specified index.
+     * @param index - The index of the cell.
+     * @returns An array of indices representing the populated neighbors.
+     */
+    GetNeighbours(index: number){
       const neighbours: number[] = [];
       let possibleUp, possibleDown, possibleLeft, possibleRight;
       if (index / this.ColsCount >= 1) {
@@ -107,7 +118,12 @@ export class Grid {
       return populatedNeighbours;
     }
   
-    FindClosestBigCity(index: number){//Find closest city of pop > 50000 to cell at index
+    /**
+     * Finds the closest city with a population greater than 50000 to the cell at the given index.
+     * @param index - The index of the cell.
+     * @returns The index of the closest big city.
+     */
+    FindClosestBigCity(index: number){
       if (this.cells[index].PopulationCount >= 50000){
         //return if cell is itself a big city
         return index
@@ -158,7 +174,11 @@ export class Grid {
       }
     }
   
-    SimImmigrations(config: Configuration){ //Sim immigrations to neighbouring cells/Large cities
+    /**
+     * Simulates immigrations to neighbouring cells and large cities.
+     * @param config - The configuration object for the simulation.
+     */
+    SimImmigrations(config: Configuration){
       const randomCells = [];
       for (let i = 0; i < 25; i++){
         const random = Math.floor(Math.random() * (1296 - 0 + 1) + 0);
@@ -197,7 +217,10 @@ export class Grid {
       }
     }
   
-    SimReturnImmigrations() { //Return immigrants to original cells  
+    /**
+     * Returns immigrants to their original cells.
+     */
+    SimReturnImmigrations() {
       let imm;
       for (let i = 0; i < this.immigrants.length; i++){
         imm = this.immigrants[i];
@@ -206,7 +229,11 @@ export class Grid {
       this.immigrants = [];
     }
   
-    ResetCells() { //Reset grid
+    /**
+     * Resets the grid by creating new cells and finding the nearest city for each cell.
+     * Also updates the overall count.
+     */
+    ResetCells() {
       this.cells = new Array(this.cellsCount);
       for(let i = 0; i < this.cellsCount; i++) {
         this.cells[i] = new Cell(cellsPopulation[i], cellsPopulation[i] * 2.5, i);
@@ -219,11 +246,19 @@ export class Grid {
       this.UpdateOverallCount();
     }
   
+    /**
+     * Sets a cell as infected.
+     * @param index - The index of the cell to set as infected.
+     */
     SetAsInfected(index: number) { //Add infected to user clicked cell
       this.cells[index].AddInfected(this.cells[index].PopulationCount / 10);
       this.UpdateOverallCount();
     }
   
+    /**
+     * Steps the simulation forward by one day.
+     * @param {Configuration} config - The configuration object for the simulation.
+     */
     Next(config: Configuration) { //Step the simulation forward (1 day)
       this.SimImmigrations(config);
       // Simulates natural deaths, deaths caused by the virus and new births.
