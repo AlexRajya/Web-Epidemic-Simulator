@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Grid } from './Grid';
 import { Configuration, Preset } from './Configuration';
 
@@ -154,7 +154,7 @@ describe('Grid', () => {
       grid.SimImmigrations(config);
       expect(grid.immigrants.length).toBe(12);
       expect(grid.cells[3].susAway).toBe(20);
-      
+
       // Call the method to simulate returning immigrants
       grid.SimReturnImmigrations();
 
@@ -166,6 +166,48 @@ describe('Grid', () => {
       
       // Assert that the immigrants array is cleared
       expect(grid.immigrants.length).toBe(0);
+    });
+  });
+
+  describe('Next', () => {
+    it('should step the simulation forward by 1 day', () => {
+      const grid = new Grid(2, 2, [10, 20, 30, 40]);
+      const simulateImmigrationsSpy = vi.spyOn(grid, 'SimImmigrations');
+      const simulateReturnImmigrationsSpy = vi.spyOn(grid, 'SimReturnImmigrations');
+      const updateOverallCountSpy = vi.spyOn(grid, 'UpdateOverallCount');
+      grid.cells.forEach((cell) => {
+        vi.spyOn(cell, 'SimNaturalDeaths');
+        vi.spyOn(cell, 'SimVirusMorbidity');
+        vi.spyOn(cell, 'SimBirths');
+        vi.spyOn(cell, 'SimInfections');
+        vi.spyOn(cell, 'SimRecoveries');
+      });
+      const config = new Configuration(Preset.COVID_19);
+
+      // Call the Next method to step the simulation forward
+      grid.Next(config);
+
+      // Assert that SimImmigrations is called
+      expect(simulateImmigrationsSpy).toHaveBeenCalledWith(config);
+
+      // Assert that SimNaturalDeaths, SimVirusMorbidity, SimBirths, and SimInfections are called for each cell
+      grid.cells.forEach((cell) => {
+        expect(cell.SimNaturalDeaths).toHaveBeenCalledWith(config.naturalDeathRate);
+        expect(cell.SimVirusMorbidity).toHaveBeenCalledWith(config.ageDist, config.ageMort);
+        expect(cell.SimBirths).toHaveBeenCalledWith(config.birthRate);
+        expect(cell.SimInfections).toHaveBeenCalled();
+      });
+
+      // Assert that SimReturnImmigrations is called
+      expect(simulateReturnImmigrationsSpy).toHaveBeenCalled();
+
+      // Assert that SimRecoveries is called for each cell
+      grid.cells.forEach((cell) => {
+        expect(cell.SimRecoveries).toHaveBeenCalledWith(config.infPeriod);
+      });
+
+      // Assert that UpdateOverallCount is called
+      expect(updateOverallCountSpy).toHaveBeenCalled();
     });
   });
 });
