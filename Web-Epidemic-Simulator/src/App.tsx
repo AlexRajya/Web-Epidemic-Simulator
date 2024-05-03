@@ -5,7 +5,7 @@ import { Configuration } from './Simulation/Configuration';
 import { ConvertTo2DArray } from './Simulation/Helpers/ConvertTo2DArray';
 import { Cell } from './Simulation/Cell';
 import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 
 function App() {
