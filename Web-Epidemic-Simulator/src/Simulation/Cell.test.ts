@@ -1,9 +1,9 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { Cell } from './Cell';
 import { IImmigrant } from './IImmigrant';
 
 describe('GetPopulationCount tests', () => {
-    test('It should take into account all stages in the count', () => {
+    it('should take into account all stages in the count', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infected.push(5);
         cell.incubated.push(5);
@@ -14,7 +14,7 @@ describe('GetPopulationCount tests', () => {
 });
 
 describe('GetInfectedCount tests', () => {
-    test('It should take into account all elements in the queue for the count', () => {
+    it('should take into account all elements in the queue for the count', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infected.push(5);
         cell.infected.push(5);
@@ -25,7 +25,7 @@ describe('GetInfectedCount tests', () => {
 });
 
 describe('GetIncubatedCount tests', () => {
-    test('It should take into account all elements in the queue for the count', () => {
+    it('should take into account all elements in the queue for the count', () => {
         const cell = new Cell(100, 1000, 1);
         cell.incubated.push(5);
         cell.incubated.push(5);
@@ -36,14 +36,14 @@ describe('GetIncubatedCount tests', () => {
 });
 
 describe('GetSusceptibleCount tests', () => {
-    test('It should return the susceptible count', () => {
+    it('should return the susceptible count', () => {
         const cell = new Cell(100, 1000, 1);
         expect(cell.SusceptibleCount).toBe(100);
     })
 });
 
 describe('GetRecoveredCount tests', () => {
-    test('It should return the recovered count', () => {
+    it('should return the recovered count', () => {
         const cell = new Cell(100, 1000, 1);
         cell.recovered = 10;
         expect(cell.RecoveredCount).toBe(10);
@@ -51,7 +51,7 @@ describe('GetRecoveredCount tests', () => {
 });
 
 describe('GetImmigrants tests', () => {
-    test('It should calculate the number of infected and susceptible individuals to move', () => {
+    it('should calculate the number of infected and susceptible individuals to move', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infected.push(5);
         cell.infected.push(5);
@@ -71,28 +71,28 @@ describe('GetImmigrants tests', () => {
 });
 
 describe('ReturnImmigrants tests', () => {
-    test('It should add newly infected to the incubated queue', () => {
+    it('should add newly infected to the incubated queue', () => {
         const cell = new Cell(100, 1000, 1);
         cell.ReturnImmigrants(5);
 
         expect(cell.incubated).toEqual([5]);
     });
 
-    test('It should decrease the susceptible count by the number of new infected', () => {
+    it('should decrease the susceptible count by the number of new infected', () => {
         const cell = new Cell(100, 1000, 1);
         cell.ReturnImmigrants(5);
 
         expect(cell.susceptible).toBe(95);
     });
 
-    test('It should set the susceptible count to 0 if it becomes negative', () => {
+    it('should set the susceptible count to 0 if it becomes negative', () => {
         const cell = new Cell(3, 1000, 1);
         cell.ReturnImmigrants(5);
 
         expect(cell.susceptible).toBe(0);
     });
 
-    test('It should reset the infAway and susAway counts to 0', () => {
+    it('should reset the infAway and susAway counts to 0', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infAway = 3;
         cell.susAway = 5;
@@ -104,7 +104,7 @@ describe('ReturnImmigrants tests', () => {
 });
 
 describe('SimNaturalDeaths tests', () => {
-    test('It should simulate natural deaths for susceptible individuals', () => {
+    it('should simulate natural deaths for susceptible individuals', () => {
         const cell = new Cell(100, 1000, 1);
         const probOfNaturalDeath = 0.1;
 
@@ -113,7 +113,7 @@ describe('SimNaturalDeaths tests', () => {
         expect(cell.susceptible).toBe(90);
     });
 
-    test('It should simulate natural deaths for incubated individuals', () => {
+    it('should simulate natural deaths for incubated individuals', () => {
         const cell = new Cell(100, 1000, 1);
         const probOfNaturalDeath = 0.1;
         cell.incubated.push(5);
@@ -124,7 +124,7 @@ describe('SimNaturalDeaths tests', () => {
         expect(cell.incubated).toEqual([4, 9]);
     });
 
-    test('It should simulate natural deaths for infected individuals', () => {
+    it('should simulate natural deaths for infected individuals', () => {
         const cell = new Cell(100, 1000, 1);
         const probOfNaturalDeath = 0.1;
         cell.infected.push(5);
@@ -135,7 +135,7 @@ describe('SimNaturalDeaths tests', () => {
         expect(cell.infected).toEqual([4, 9]);
     });
 
-    test('It should simulate natural deaths for recovered individuals', () => {
+    it('should simulate natural deaths for recovered individuals', () => {
         const cell = new Cell(100, 1000, 1);
         const probOfNaturalDeath = 0.1;
         cell.recovered = 10;
@@ -147,7 +147,7 @@ describe('SimNaturalDeaths tests', () => {
 });
 
 describe('SimVirusMorbidity tests', () => {
-    test('It should simulate deaths caused by the virus', () => {
+    it('should simulate deaths caused by the virus', () => {
         const cell = new Cell(100, 1000, 1);
         const ageDist = [0.2, 0.3, 0.5];
         const ageMort = [0.1, 0.2, 0.3];
@@ -160,7 +160,7 @@ describe('SimVirusMorbidity tests', () => {
 });
 
 describe('SimBirths tests', () => {
-    test('It should simulate natural births and increase the susceptible count', () => {
+    it('should simulate natural births and increase the susceptible count', () => {
         const cell = new Cell(100, 1000, 1);
         const prob = 0.1;
 
@@ -169,7 +169,7 @@ describe('SimBirths tests', () => {
         expect(cell.susceptible).toBe(110);
     });
 
-    test('It should not simulate natural births if the population exceeds the limit', () => {
+    it('should not simulate natural births if the population exceeds the limit', () => {
         const cell = new Cell(100, 100, 1);
         const prob = 0.1;
 
@@ -180,7 +180,7 @@ describe('SimBirths tests', () => {
 });
 
 describe('SimInfections tests', () => {
-    test('It should simulate new infections and update the population counts', () => {
+    it('should simulate new infections and update the population counts', () => {
         const cell = new Cell(100, 1000, 1);
         const probOfCatchingInfection = 0.9;
         const incPeriod = 3;
@@ -203,7 +203,7 @@ describe('SimInfections tests', () => {
         expect(cell.infected).toEqual([0]);
     });
 
-    test('It should handle cases where the population count is 0', () => {
+    it('should handle cases where the population count is 0', () => {
         const cell = new Cell(0, 1000, 1);
         const probOfCatchingInfection = 0.2;
         const incPeriod = 3;
@@ -224,7 +224,7 @@ describe('SimInfections tests', () => {
 });
 
 describe('SimRecoveries tests', () => {
-    test('It should simulate recoveries and update the recovered count', () => {
+    it('should simulate recoveries and update the recovered count', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infected = [10, 20, 30];
         const infectionLifespan = 2;
@@ -235,7 +235,7 @@ describe('SimRecoveries tests', () => {
         expect(cell.recovered).toBe(10);
     });
 
-    test('It should not update the recovered count if there are no infected individuals', () => {
+    it('should not update the recovered count if there are no infected individuals', () => {
         const cell = new Cell(100, 1000, 1);
         const infectionLifespan = 2;
 
@@ -245,7 +245,7 @@ describe('SimRecoveries tests', () => {
         expect(cell.recovered).toBe(0);
     });
 
-    test('It should not update the recovered count if the infection lifespan is greater than the number of infected individuals', () => {
+    it('should not update the recovered count if the infection lifespan is greater than the number of infected individuals', () => {
         const cell = new Cell(100, 1000, 1);
         cell.infected = [10, 20, 30];
         const infectionLifespan = 4;

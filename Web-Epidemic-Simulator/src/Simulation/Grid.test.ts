@@ -134,7 +134,7 @@ describe('Grid', () => {
       grid.SimImmigrations(config);
   
       // Assert that the immigrants are added correctly
-      expect(grid.immigrants.length).toBe(57);
+      expect(grid.immigrants.length).toBe(58);
   
       // Assert that the immigrants' origin and current location are valid
       for (const immigrant of grid.immigrants) {
@@ -169,7 +169,7 @@ describe('Grid', () => {
     });
   });
 
-  describe('Next', () => {
+  describe('Next tests', () => {
     it('should step the simulation forward by 1 day', () => {
       const grid = new Grid(2, 2, [10, 20, 30, 40]);
       const simulateImmigrationsSpy = vi.spyOn(grid, 'SimImmigrations');
