@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Grid } from './Grid';
+import { Configuration, Preset } from './Configuration';
 
 describe('Grid', () => {
   describe('UpdateOverallCount', () => {
@@ -121,6 +122,27 @@ describe('Grid', () => {
       // Test case: index = 0 (top-left corner)
       const closestBigCityIndex = grid.FindClosestBigCity(0);
       expect(closestBigCityIndex).toBeUndefined();
+    });
+  });
+
+  describe('SimImmigrations', () => {
+    it('should simulate immigrations correctly', () => {
+      const grid = new Grid(3, 3, [10, 20, 30, 40, 50000, 60, 70000, 80, 90]);
+      const config = new Configuration(Preset.COVID_19);
+  
+      // Call the method to simulate immigrations
+      grid.SimImmigrations(config);
+  
+      // Assert that the immigrants are added correctly
+      expect(grid.immigrants.length).toBe(57);
+  
+      // Assert that the immigrants' origin and current location are valid
+      for (const immigrant of grid.immigrants) {
+        expect(immigrant.origin).toBeGreaterThanOrEqual(0);
+        expect(immigrant.origin).toBeLessThan(grid.cells.length);
+        expect(immigrant.neigh).toBeGreaterThanOrEqual(0);
+        expect(immigrant.neigh).toBeLessThan(grid.cells.length);
+      }
     });
   });
 });

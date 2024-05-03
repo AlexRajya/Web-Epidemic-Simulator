@@ -189,7 +189,7 @@ export class Grid {
     SimImmigrations(config: Configuration){
       const randomCells = [];
       for (let i = 0; i < 25; i++){
-        const random = Math.floor(Math.random() * (1296 - 0 + 1) + 0);
+        const random = Math.floor(Math.random() * this.cellsCount);
         randomCells.push(random);
       }
       for (let i = 0; i < this.cells.length; i++){
@@ -202,9 +202,9 @@ export class Grid {
             neighbours.push(nearestCity)
           }
   
-          //random big city
-          if (randomCells.includes(i)){
-            const random = Math.floor(Math.random() * ((this.largeCities.length) - 0 + 1) + 0);
+          //also send some people to a random big city (tourists, long distance delivery etc.)
+          if (randomCells.includes(i) && this.largeCities.length){
+            const random = Math.floor(Math.random() * this.largeCities.length);
             neighbours.push(this.largeCities[random]);
           }
   
