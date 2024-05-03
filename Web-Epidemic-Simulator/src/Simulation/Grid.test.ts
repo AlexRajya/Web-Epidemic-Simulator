@@ -145,4 +145,27 @@ describe('Grid', () => {
       }
     });
   });
+
+  describe('SimReturnImmigrations', () => {
+    it('should return immigrants to their origin cells and clear the immigrants array', () => {
+      const originalPopulations = [10, 20, 30, 40];
+      const grid = new Grid(2, 2, originalPopulations);
+      const config = new Configuration(Preset.COVID_19);
+      grid.SimImmigrations(config);
+      expect(grid.immigrants.length).toBe(12);
+      expect(grid.cells[3].susAway).toBe(20);
+      
+      // Call the method to simulate returning immigrants
+      grid.SimReturnImmigrations();
+
+      grid.cells.forEach((cell) => {
+        expect(cell.infAway).toBe(0);
+        expect(cell.susAway).toBe(0);
+        expect(cell.PopulationCount).toBe(originalPopulations[cell.Index]);
+      });
+      
+      // Assert that the immigrants array is cleared
+      expect(grid.immigrants.length).toBe(0);
+    });
+  });
 });
