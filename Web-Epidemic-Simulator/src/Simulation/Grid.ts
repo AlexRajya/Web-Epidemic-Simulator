@@ -242,25 +242,6 @@ export class Grid {
     }
   
     /**
-     * Resets the grid by creating new cells and finding the nearest city for each cell.
-     * Also updates the overall count.
-     * DEVNOTE: Currently unused.
-     */
-    ResetCells(cellsPopulation: number[]) {
-      this.cells = new Array(this.cellsCount);
-      for(let i = 0; i < this.cellsCount; i++) {
-        this.cells[i] = new Cell(cellsPopulation[i], cellsPopulation[i] * 2.5, i);
-      }
-  
-      //find nearest city over population 50000 for every cell
-      for (let i = 0; i < this.cellsCount; i++){
-        const nearCity = this.FindClosestBigCity(i);
-        if(nearCity !== undefined) this.nearestCities.push(nearCity);
-      }
-      this.UpdateOverallCount();
-    }
-  
-    /**
      * Sets a cell as infected.
      * @param index - The index of the cell to set as infected.
      */
