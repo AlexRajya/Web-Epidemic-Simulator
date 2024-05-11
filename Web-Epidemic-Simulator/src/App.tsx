@@ -17,6 +17,17 @@ function App() {
   const [infectedCount, setInfectedCount] = useState<number>(grid.InfectedOverallCount);
   const [recoveredCount, setRecoveredCount] = useState<number>(grid.RecoveredOverallCount);
   const [config] = useState<Configuration>(new Configuration());
+  const [running, setRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (running) {
+      const interval = setInterval(() => {
+        grid.Next(config);
+        updateCounts(grid);
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [running, grid, config]);
 
   useEffect(() => {
     const startGrid = new Grid(rows, cols, cellsPopulation);
@@ -41,7 +52,7 @@ function App() {
             <Typography variant="h4" component="div" sx={{ flexGrow: 1, textAlign:"left", padding: "10px" }}>
               Epidemic Simulation
             </Typography>
-            <Button variant="text" href='https://github.com/AlexRajya/Web-Epidemic-Simulator' sx={{color: "white"}}>
+            <Button color="inherit" href='https://github.com/AlexRajya/Web-Epidemic-Simulator' sx={{color: "white"}}>
               Source
             </Button>
           </Toolbar>
@@ -61,12 +72,20 @@ function App() {
           )}
         </div>
         <div style={{width: "300px", marginTop: "auto", marginBottom: "auto"}}>
-          <Button variant="contained" onClick={() => {
-              grid.Next(config);
-              updateCounts(grid);
-            }
+          <Button 
+              style={{marginRight: "10px"}} 
+              variant="contained"
+              onClick={() => {
+                grid.Next(config);
+                updateCounts(grid);
+              }
           }>
             Next day
+          </Button>
+          <Button variant="contained" onClick={() => {
+            setRunning(!running)}
+          }>
+            {running ? 'Stop' : 'Start'}
           </Button>
           <p>
             Total population: {populationCount}
