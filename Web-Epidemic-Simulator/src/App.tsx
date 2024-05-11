@@ -3,7 +3,7 @@ import './App.css'
 import { Grid } from './Simulation/Grid';
 import { Configuration } from './Simulation/Configuration';
 import { ConvertTo2DArray } from './Simulation/Helpers/ConvertTo2DArray';
-import { Cell } from './Simulation/Cell';
+import Cell from './Components/Cell';
 import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
@@ -23,24 +23,6 @@ function App() {
     startGrid.SetAsInfected(1001);
     setGrid(startGrid);
   }, []);
-
-  const cellColour = (cell: Cell): string => {
-      let colour = "gray";
-      if(cell.PopulationCount){
-        colour = "white";
-      }
-
-      const percentInfected = ((cell.IncubatedCount + cell.InfectedCount) / cell.PopulationCount) * 100;
-      if(percentInfected > 90){
-        colour = "red";
-      }else if(percentInfected > 60){
-        colour = "orange";
-      }else if(percentInfected > 30){
-        colour = "yellow";
-      }
-
-      return colour
-  }
 
   const updateCounts = (newGrid: Grid): void => {
     setPopulationCount(newGrid.PopulationOverallCount);
@@ -70,8 +52,8 @@ function App() {
           {ConvertTo2DArray(grid.cells, rows).map((rowOfCells, index) => 
             <div style={{display: 'flex'}} key={"row-" + index}>
               {rowOfCells.map((cell) => 
-                <div 
-                  style={{ backgroundColor: cellColour(cell), border: "1px solid black", width: "10px", height: "10px"}} 
+                <Cell
+                  cell={cell}
                   key={"cell-" + cell.Index}
                 /> 
               )}
