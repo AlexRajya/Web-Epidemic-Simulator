@@ -68,11 +68,13 @@ export class Grid {
       this.incubatedCount = 0;
       this.infectedCount = 0;
       this.recoveredCount = 0;
+      this.susceptibleCount = 0;
       for (let i = 0; i < this.cells.length; i++){
         this.populationCount += this.cells[i].PopulationCount;
         this.incubatedCount += this.cells[i].IncubatedCount;
         this.infectedCount += this.cells[i].InfectedCount;
         this.recoveredCount += this.cells[i].RecoveredCount;
+        this.susceptibleCount += this.cells[i].SusceptibleCount;
       }
     }
   
