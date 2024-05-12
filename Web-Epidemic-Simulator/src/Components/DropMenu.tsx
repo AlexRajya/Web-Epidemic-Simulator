@@ -7,7 +7,7 @@ import React from 'react';
 const actions = [
     { icon: <FileDownloadIcon />, name: '(Coming soon) Export config' },
     { icon: <UploadIcon />, name: '(Coming soon) Import config' },
-    { icon: <ShareIcon />, name: 'Share' },
+    { icon: <ShareIcon />, name: '(Coming soon) Share' },
   ];
 
 const DropMenu: React.FC = () => {
