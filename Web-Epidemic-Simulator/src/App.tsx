@@ -9,6 +9,7 @@ import { Button } from '@mui/material';
 import HeaderBar from './Components/HeaderBar';
 import DropMenu from './Components/DropMenu';
 import Footer from './Components/Footer';
+import { Grid as GridComponent } from '@mui/material';
 
 function App() {
   const cols = 36, rows = 36;
@@ -46,9 +47,14 @@ function App() {
   }
 
   return (
-    <>
-      <HeaderBar />
-      <div style={{display: "flex", alignContent: "center", justifyContent: "center", marginTop: "10%"}}>
+    <GridComponent container spacing={4} direction="column"
+        justifyContent="space-evenly"
+        alignItems="center"
+    >
+      <GridComponent item xs={12}>
+        <HeaderBar />
+      </GridComponent>
+      <GridComponent item xs={12}>
         <div className='grid'>
           {ConvertTo2DArray(grid.cells, rows).map((rowOfCells, index) => 
             <div style={{display: 'flex'}} key={"row-" + index}>
@@ -61,9 +67,10 @@ function App() {
             </div>
           )}
         </div>
-        <div style={{width: "300px", marginTop: "auto", marginBottom: "auto"}}>
+      </GridComponent>
+      <GridComponent item xs={12}>
+        <div style={{display: "flex", gap: "10px"}}>
           <Button 
-              style={{marginRight: "10px"}} 
               variant="contained"
               onClick={() => {
                 grid.Next(config);
@@ -77,6 +84,21 @@ function App() {
           }>
             {running ? 'Stop' : 'Start'}
           </Button>
+          <Button 
+            variant="contained" 
+            onClick={() => {
+                const startGrid = new Grid(rows, cols, cellsPopulation);
+                updateCounts(startGrid);
+                setGrid(startGrid);
+                startGrid.SetAsInfected(PickRandomCell(grid, cols, rows));
+            } 
+          }>
+            Reset
+          </Button>
+        </div>
+      </GridComponent>
+      <GridComponent item xs={12}>
+        <div style={{width: "300px", marginTop: "auto", marginBottom: "auto"}}>
           <p>
             <span className='displayText'>Total population: </span> 
             {populationCount}
@@ -97,20 +119,13 @@ function App() {
             <span className='displayText recovered'>Total recovered:</span>
             {recoveredCount}
           </p>
-          <Button variant="contained" onClick={() => {
-              const startGrid = new Grid(rows, cols, cellsPopulation);
-              updateCounts(startGrid);
-              setGrid(startGrid);
-              startGrid.SetAsInfected(PickRandomCell(grid, cols, rows));
-            } 
-          }>
-            Reset
-          </Button>
         </div>
-      </div>
+      </GridComponent>
       <DropMenu />
-      <Footer />
-    </>
+      <GridComponent item xs={12}>
+        <Footer />
+      </GridComponent>
+    </GridComponent>
   )
 }
 

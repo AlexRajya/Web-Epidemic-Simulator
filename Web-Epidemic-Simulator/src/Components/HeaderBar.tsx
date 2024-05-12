@@ -1,6 +1,5 @@
-import { Box, AppBar, Toolbar, Typography, Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import InfoIcon from '@mui/icons-material/Info';
 import CloseIcon from '@mui/icons-material/Close';
 import React from 'react';
@@ -17,7 +16,7 @@ const HeaderBar: React.FC = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <div style={{width: "100vw"}}>
             <AppBar position="static">
                 <Toolbar>
                     <CoronavirusIcon fontSize='large'/>
@@ -27,9 +26,6 @@ const HeaderBar: React.FC = () => {
                     <Button startIcon={<InfoIcon />} color="inherit" onClick={handleClickOpen}>
                         About
                     </Button>
-                    <Button startIcon={<GitHubIcon/>} color="inherit" href='https://github.com/AlexRajya/Web-Epidemic-Simulator' sx={{color: "white"}}>
-                        Source 
-                    </Button>
                 </Toolbar>
             </AppBar>
             <Dialog
@@ -38,7 +34,7 @@ const HeaderBar: React.FC = () => {
                 open={openAboutDialog}
             >
                 <DialogTitle className='dialogTitle' sx={{ m: 0, p: 2}} id="customized-dialog-title">
-                    <div className='dialogTitleText'><CoronavirusIcon/>Epidemic Simulator Info</div>
+                    <div className='dialogTitleText'><CoronavirusIcon sx={{ marginRight: "10px" }}/>Epidemic Simulator Info</div>
                 </DialogTitle>
                 <IconButton
                     aria-label="close"
@@ -67,7 +63,7 @@ const HeaderBar: React.FC = () => {
                     </p>
                 </DialogContent>
         </Dialog>
-      </Box>
+      </div>
     );
 };
 
