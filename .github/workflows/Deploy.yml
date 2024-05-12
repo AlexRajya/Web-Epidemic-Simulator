@@ -1,6 +1,10 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+defaults:
+  run:
+    working-directory: ./Web-Epidemic-Simulator
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -28,8 +32,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Change directory
-        run: cd ./Web-Epidemic-Simulator
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node
