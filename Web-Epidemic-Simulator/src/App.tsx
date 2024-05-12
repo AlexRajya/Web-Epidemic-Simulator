@@ -7,6 +7,7 @@ import Cell from './Components/Cell';
 import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
+import HeaderBar from './Components/HeaderBar';
 
 function App() {
   const cols = 36, rows = 36;
@@ -45,19 +46,7 @@ function App() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <CoronavirusIcon fontSize='large'/>
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1, textAlign:"left", padding: "10px" }}>
-              Epidemic Simulation
-            </Typography>
-            <Button color="inherit" href='https://github.com/AlexRajya/Web-Epidemic-Simulator' sx={{color: "white"}}>
-              Source
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <HeaderBar />
       <div style={{display: "flex", alignContent: "center", justifyContent: "center", marginTop: "10%"}}>
         <div>
           {ConvertTo2DArray(grid.cells, rows).map((rowOfCells, index) => 
