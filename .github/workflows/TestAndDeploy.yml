@@ -25,6 +25,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Check tests pass before deploying
   test:
     runs-on: ubuntu-latest
     steps:
@@ -42,6 +43,7 @@ jobs:
         run: npm run test
   # Single deploy job since we're just deploying
   deploy:
+    needs: test
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
