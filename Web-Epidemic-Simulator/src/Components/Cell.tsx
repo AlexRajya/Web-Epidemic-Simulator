@@ -29,7 +29,7 @@ const Cell: React.FC<CellProps> = ({ cell }: CellProps) => {
     return (
         <>
             <div
-                className='Cell'
+                className='cell'
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
                 style={{ backgroundColor: cellColour(cell)}} 
