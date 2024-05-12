@@ -5,12 +5,23 @@ import ShareIcon from '@mui/icons-material/Share';
 import React from 'react';
 
 const actions = [
-    { icon: <FileDownloadIcon />, name: '(Coming soon) Export config' },
-    { icon: <UploadIcon />, name: '(Coming soon) Import config' },
-    { icon: <ShareIcon />, name: '(Coming soon) Share' },
+    { icon: <FileDownloadIcon />, name: '(Coming soon) Export config', operation: 'export' },
+    { icon: <UploadIcon />, name: '(Coming soon) Import config', operation: 'upload' },
+    { icon: <ShareIcon />, name: 'Share', operation: 'share' },
   ];
 
 const DropMenu: React.FC = () => {
+    const handleClick = (operation: string) => {
+        if(operation === 'share') {
+            const shareData = {
+                title: 'Epidemic Simulator',
+                text: 'Check out this epidemic simulator!',
+                url: 'https://alexrajya.github.io/Web-Epidemic-Simulator/',
+            }
+            navigator.share(shareData);
+        }
+    }
+
     return (
         <SpeedDial
             ariaLabel="SpeedDial tooltip example"
@@ -22,6 +33,7 @@ const DropMenu: React.FC = () => {
                     key={action.name}
                     icon={action.icon}
                     tooltipTitle={action.name}
+                    onClick={() => handleClick(action.operation)}
                 />
             ))}
         </SpeedDial>
