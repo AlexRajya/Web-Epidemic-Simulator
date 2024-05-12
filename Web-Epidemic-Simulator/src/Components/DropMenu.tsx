@@ -18,11 +18,11 @@ const DropMenu: React.FC = () => {
             icon={<SpeedDialIcon />}
         >
             {actions.map((action) => (
-            <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-            />
+                <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                />
             ))}
         </SpeedDial>
     );
