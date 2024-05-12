@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import { Grid } from './Simulation/Grid';
 import { Configuration } from './Simulation/Configuration';
-import { ConvertTo2DArray } from './Simulation/Helpers/ConvertTo2DArray';
+import { ConvertTo2DArray, PickRandomCell } from './Simulation/Helpers/ConvertTo2DArray';
 import Cell from './Components/Cell';
 import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
 import { Button } from '@mui/material';
@@ -33,7 +33,7 @@ function App() {
 
   useEffect(() => {
     const startGrid = new Grid(rows, cols, cellsPopulation);
-    startGrid.SetAsInfected(1001);
+    startGrid.SetAsInfected(PickRandomCell(startGrid, cols, rows));
     setGrid(startGrid);
   }, []);
 
@@ -101,7 +101,7 @@ function App() {
               const startGrid = new Grid(rows, cols, cellsPopulation);
               updateCounts(startGrid);
               setGrid(startGrid);
-              startGrid.SetAsInfected(1001);
+              startGrid.SetAsInfected(PickRandomCell(grid, cols, rows));
             } 
           }>
             Reset
