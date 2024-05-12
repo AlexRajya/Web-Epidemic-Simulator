@@ -7,6 +7,7 @@ import Cell from './Components/Cell';
 import { cellsPopulation } from './Simulation/Data/GermanyPopulationDensity';
 import { Button } from '@mui/material';
 import HeaderBar from './Components/HeaderBar';
+import DropMenu from './Components/DropMenu';
 
 function App() {
   const cols = 36, rows = 36;
@@ -101,6 +102,7 @@ function App() {
           </Button>
         </div>
       </div>
+      <DropMenu />
     </>
   )
 }
