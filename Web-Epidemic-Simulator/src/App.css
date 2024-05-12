@@ -14,3 +14,29 @@ html, body {
     animation: logo-spin infinite 20s linear;
   }
 }
+
+.grid {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.displayText {
+  color: #1976d2;
+  font-weight: 700;
+  padding-right: 4px;
+}
+
+.susceptible {
+  color: #91d7e4;
+}
+
+.infected {
+  color: #f17575;
+}
+
+.incubated {
+  color: #fda867;
+}
+
+.recovered {
+  color: #99f59c;
+}

@@ -48,7 +48,7 @@ function App() {
     <>
       <HeaderBar />
       <div style={{display: "flex", alignContent: "center", justifyContent: "center", marginTop: "10%"}}>
-        <div>
+        <div className='grid'>
           {ConvertTo2DArray(grid.cells, rows).map((rowOfCells, index) => 
             <div style={{display: 'flex'}} key={"row-" + index}>
               {rowOfCells.map((cell) => 
@@ -77,19 +77,24 @@ function App() {
             {running ? 'Stop' : 'Start'}
           </Button>
           <p>
-            Total population: {populationCount}
+            <span className='displayText'>Total population: </span> 
+            {populationCount}
           </p>
           <p>
-            Total susceptible: {susceptibleCount}
+            <span className='displayText susceptible'>Total susceptible: </span> 
+            {susceptibleCount}
           </p>
           <p>
-            Total incubating: {incubatedCount}
+            <span className='displayText incubated'>Total incubating:</span>
+            {incubatedCount}
           </p>
           <p>
-            Total infected: {infectedCount}
+            <span className='displayText infected'>Total infected:</span>
+            {infectedCount}
           </p>
           <p>
-            Total recovered: {recoveredCount}
+            <span className='displayText recovered'>Total recovered:</span>
+            {recoveredCount}
           </p>
           <Button variant="contained" onClick={() => {
               const startGrid = new Grid(rows, cols, cellsPopulation);
