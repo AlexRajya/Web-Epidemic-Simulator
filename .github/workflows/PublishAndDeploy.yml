@@ -29,7 +29,6 @@ jobs:
   bump-version:
     name: "Bump Version on master"
     runs-on: ubuntu-latest
-
     steps:
       - name: "Checkout source code"
         uses: "actions/checkout@v2"
@@ -51,6 +50,7 @@ jobs:
         run: cat ./package.json
   # Check tests pass before deploying
   test:
+    needs: bump-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
