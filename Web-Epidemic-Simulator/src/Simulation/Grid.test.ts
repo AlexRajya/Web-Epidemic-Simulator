@@ -1,29 +1,29 @@
-import { describe, expect, it, vi } from 'vitest';
-import { Grid } from './Grid';
-import { Configuration, Preset } from './Configuration';
+import { describe, expect, it, vi } from "vitest";
+import { Grid } from "./Grid";
+import { Configuration, Preset } from "./Configuration";
 
-describe('Grid', () => {
-  describe('UpdateOverallCount', () => {
-    it('should update the overall counts correctly', () => {
-        const grid = new Grid(2, 2, [10, 20, 30, 40]);
-        grid.cells[0].incubated.push(5);
-        grid.cells[0].infected.push(10);
-        grid.cells[1].infected.push(10);
-        grid.cells[1].recovered = 10;
+describe("Grid", () => {
+  describe("UpdateOverallCount", () => {
+    it("should update the overall counts correctly", () => {
+      const grid = new Grid(2, 2, [10, 20, 30, 40]);
+      grid.cells[0].incubated.push(5);
+      grid.cells[0].infected.push(10);
+      grid.cells[1].infected.push(10);
+      grid.cells[1].recovered = 10;
 
-        // Call the method to update the overall counts
-        grid.UpdateOverallCount();
+      // Call the method to update the overall counts
+      grid.UpdateOverallCount();
 
-        // Assert that the overall counts are updated correctly
-        expect(grid.populationCount).toBe(135);
-        expect(grid.incubatedCount).toBe(5);
-        expect(grid.infectedCount).toBe(20);
-        expect(grid.recoveredCount).toBe(10);
+      // Assert that the overall counts are updated correctly
+      expect(grid.populationCount).toBe(135);
+      expect(grid.incubatedCount).toBe(5);
+      expect(grid.infectedCount).toBe(20);
+      expect(grid.recoveredCount).toBe(10);
     });
   });
 
-  describe('SetAsInfected', () => {
-    it('should add infected to the user clicked cell and update overall counts', () => {
+  describe("SetAsInfected", () => {
+    it("should add infected to the user clicked cell and update overall counts", () => {
       const grid = new Grid(2, 2, [10, 20, 30, 40]);
       const index = 0;
 
@@ -41,8 +41,8 @@ describe('Grid', () => {
     });
   });
 
-  describe('GetNeighbours', () => {
-    it('should return the correct populated neighbours', () => {
+  describe("GetNeighbours", () => {
+    it("should return the correct populated neighbours", () => {
       const grid = new Grid(3, 3, [10, 20, 30, 40, 50, 60, 70, 80, 90]);
 
       // Test case 1: index = 0 (top-left corner)
@@ -74,7 +74,7 @@ describe('Grid', () => {
       expect(neighbours.sort()).toEqual([1, 2, 4, 7, 8]);
     });
 
-    it('should return an empty array if no populated neighbours exist', () => {
+    it("should return an empty array if no populated neighbours exist", () => {
       const grid = new Grid(2, 2, [0, 0, 0, 0]);
 
       // Test case: index = 0 (top-left corner)
@@ -83,9 +83,13 @@ describe('Grid', () => {
     });
   });
 
-  describe('FindClosestBigCity', () => {
-    it('should return the index of the closest big city', () => {
-      const grid = new Grid(3, 3, [10000, 20000, 30000, 40000, 50000, 60000, 10000, 80000, 10000]);
+  describe("FindClosestBigCity", () => {
+    it("should return the index of the closest big city", () => {
+      const grid = new Grid(
+        3,
+        3,
+        [10000, 20000, 30000, 40000, 50000, 60000, 10000, 80000, 10000]
+      );
 
       // Test case 1: index = 0 (top-left corner)
       let closestBigCityIndex = grid.FindClosestBigCity(0);
@@ -116,7 +120,7 @@ describe('Grid', () => {
       expect(closestBigCityIndex).toBe(5);
     });
 
-    it('should return undefined if no big cities exist', () => {
+    it("should return undefined if no big cities exist", () => {
       const grid = new Grid(2, 2, [10000, 20000, 30000, 40000]);
 
       // Test case: index = 0 (top-left corner)
@@ -125,17 +129,17 @@ describe('Grid', () => {
     });
   });
 
-  describe('SimImmigrations', () => {
-    it('should simulate immigrations correctly', () => {
+  describe("SimImmigrations", () => {
+    it("should simulate immigrations correctly", () => {
       const grid = new Grid(3, 3, [10, 20, 30, 40, 50000, 60, 70000, 80, 90]);
       const config = new Configuration(Preset.COVID_19);
-  
+
       // Call the method to simulate immigrations
       grid.SimImmigrations(config);
-  
+
       // Assert that the immigrants are added correctly
       expect(grid.immigrants.length).toBeGreaterThanOrEqual(57);
-  
+
       // Assert that the immigrants' origin and current location are valid
       for (const immigrant of grid.immigrants) {
         expect(immigrant.origin).toBeGreaterThanOrEqual(0);
@@ -146,8 +150,8 @@ describe('Grid', () => {
     });
   });
 
-  describe('SimReturnImmigrations', () => {
-    it('should return immigrants to their origin cells and clear the immigrants array', () => {
+  describe("SimReturnImmigrations", () => {
+    it("should return immigrants to their origin cells and clear the immigrants array", () => {
       const originalPopulations = [10, 20, 30, 40];
       const grid = new Grid(2, 2, originalPopulations);
       const config = new Configuration(Preset.COVID_19);
@@ -163,24 +167,27 @@ describe('Grid', () => {
         expect(cell.susAway).toBe(0);
         expect(cell.PopulationCount).toBe(originalPopulations[cell.Index]);
       });
-      
+
       // Assert that the immigrants array is cleared
       expect(grid.immigrants.length).toBe(0);
     });
   });
 
-  describe('Next tests', () => {
-    it('should step the simulation forward by 1 day', () => {
+  describe("Next tests", () => {
+    it("should step the simulation forward by 1 day", () => {
       const grid = new Grid(2, 2, [10, 20, 30, 40]);
-      const simulateImmigrationsSpy = vi.spyOn(grid, 'SimImmigrations');
-      const simulateReturnImmigrationsSpy = vi.spyOn(grid, 'SimReturnImmigrations');
-      const updateOverallCountSpy = vi.spyOn(grid, 'UpdateOverallCount');
+      const simulateImmigrationsSpy = vi.spyOn(grid, "SimImmigrations");
+      const simulateReturnImmigrationsSpy = vi.spyOn(
+        grid,
+        "SimReturnImmigrations"
+      );
+      const updateOverallCountSpy = vi.spyOn(grid, "UpdateOverallCount");
       grid.cells.forEach((cell) => {
-        vi.spyOn(cell, 'SimNaturalDeaths');
-        vi.spyOn(cell, 'SimVirusMorbidity');
-        vi.spyOn(cell, 'SimBirths');
-        vi.spyOn(cell, 'SimInfections');
-        vi.spyOn(cell, 'SimRecoveries');
+        vi.spyOn(cell, "SimNaturalDeaths");
+        vi.spyOn(cell, "SimVirusMorbidity");
+        vi.spyOn(cell, "SimBirths");
+        vi.spyOn(cell, "SimInfections");
+        vi.spyOn(cell, "SimRecoveries");
       });
       const config = new Configuration(Preset.COVID_19);
 
@@ -192,8 +199,13 @@ describe('Grid', () => {
 
       // Assert that SimNaturalDeaths, SimVirusMorbidity, SimBirths, and SimInfections are called for each cell
       grid.cells.forEach((cell) => {
-        expect(cell.SimNaturalDeaths).toHaveBeenCalledWith(config.naturalDeathRate);
-        expect(cell.SimVirusMorbidity).toHaveBeenCalledWith(config.ageDist, config.ageMort);
+        expect(cell.SimNaturalDeaths).toHaveBeenCalledWith(
+          config.naturalDeathRate
+        );
+        expect(cell.SimVirusMorbidity).toHaveBeenCalledWith(
+          config.ageDist,
+          config.ageMort
+        );
         expect(cell.SimBirths).toHaveBeenCalledWith(config.birthRate);
         expect(cell.SimInfections).toHaveBeenCalled();
       });

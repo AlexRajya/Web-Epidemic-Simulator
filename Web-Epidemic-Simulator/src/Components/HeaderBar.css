@@ -1,15 +1,15 @@
 .dialog {
-    background-color: #242424;
-    color: white;
+  background-color: #242424;
+  color: white;
 }
 
 .dialogTitleText {
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 }
 
 .dialogTitle {
-    background-color: #1976d2;
-    color: white;
+  background-color: #1976d2;
+  color: white;
 }
