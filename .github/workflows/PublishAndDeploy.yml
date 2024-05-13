@@ -7,7 +7,7 @@ defaults:
 
 on:
   # Runs on tag creation
-  push:
+  create:
     tags:
       - "*"
   # Allows you to run this workflow manually from the Actions tab
