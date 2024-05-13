@@ -6,16 +6,16 @@ defaults:
     working-directory: ./Web-Epidemic-Simulator
 
 on:
-  # Runs on tag creation
+  # Runs on pushes targeting the default branch
   push:
-    tags:
-      - v*
+    branches: ["main"]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -25,8 +25,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Bump version before testing and deploying
+  bump-version:
+    name: "Bump Version on master"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v4"
+        with:
+          ref: ${{ github.ref }}
+      - name: "cat package.json"
+        run: cat ./package.json
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v4"
+        with:
+          node-version: 20
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: "v"
+          PACKAGEJSON_DIR: "Web-Epidemic-Simulator"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "cat package.json"
+        run: cat ./package.json
   # Check tests pass before deploying
   test:
+    needs: bump-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
