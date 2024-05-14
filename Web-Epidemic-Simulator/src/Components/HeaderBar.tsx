@@ -76,7 +76,7 @@ const HeaderBar: React.FC = () => {
           <p>
             This web app aims to simulate and visualise the spread of an
             epidemic through 2D cellular automata and the SEIR model. For this
-            particular simulation, we are simulating the spread of an epidemic
+            particular simulation, we are simulating the spread of COVID-19
             through Germany. We took real population data and condensed it down
             into a 36x36 grid.
           </p>
@@ -85,6 +85,10 @@ const HeaderBar: React.FC = () => {
             population of a random cell in the grid. The simulation will then
             simulate individuals travelling to neighbouring cells and to large
             cities to simulate travelling for work thus spreading the virus.
+          </p>
+          <p>
+            The values used in the simulation were taken from published
+            literature, but these are also configurable via the settings button.
           </p>
           <p>To begin, simply press the start button.</p>
         </DialogContent>
