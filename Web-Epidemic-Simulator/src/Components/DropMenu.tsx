@@ -3,18 +3,18 @@ import UploadIcon from "@mui/icons-material/Upload";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ShareIcon from "@mui/icons-material/Share";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import React from "react";
+import React, { useRef } from "react";
 import { IConfiguration } from "../Simulation/Configuration";
 
 const actions = [
   {
     icon: <FileDownloadIcon />,
-    name: "Export config",
+    name: "Export Config",
     operation: "export",
   },
   {
     icon: <UploadIcon />,
-    name: "(Coming soon) Import config",
+    name: "Import Config",
     operation: "upload",
   },
   { icon: <ShareIcon />, name: "Share", operation: "share" },
@@ -23,11 +23,15 @@ const actions = [
 
 interface DropMenuProps {
   configToExport: IConfiguration;
+  onConfigImport: (config: IConfiguration) => void;
 }
 
 const DropMenu: React.FC<DropMenuProps> = ({
   configToExport,
+  onConfigImport,
 }: DropMenuProps) => {
+  const inputFile = useRef<HTMLInputElement | null>(null);
+
   const handleClick = (operation: string) => {
     if (operation === "share") {
       const shareData = {
@@ -42,39 +46,60 @@ const DropMenu: React.FC<DropMenuProps> = ({
         "_blank"
       );
     } else if (operation === "export") {
-      // convert it to json
       const json = JSON.stringify(configToExport);
-      // create a blob from the json
       const blob = new Blob([json], { type: "application/json" });
+
       // create a link element
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = "config.json"; // replace this with your desired file name
-      // append the link to the body
       document.body.appendChild(link);
+
       // programmatically click the link to trigger the download
       link.click();
-      // remove the link after downloading
       document.body.removeChild(link);
+    } else if (operation === "upload") {
+      if (inputFile.current) {
+        inputFile.current.click();
+      }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.item(0);
+    if (file) {
+      file.text().then((text) => {
+        const config = JSON.parse(text) as IConfiguration;
+        onConfigImport(config);
+      });
     }
   };
 
   return (
-    <SpeedDial
-      ariaLabel="SpeedDial tooltip example"
-      sx={{ position: "absolute", bottom: 16, right: 16 }}
-      icon={<SpeedDialIcon />}
-    >
-      {actions.map((action) => (
-        <SpeedDialAction
-          key={action.name}
-          icon={action.icon}
-          tooltipTitle={action.name}
-          onClick={() => handleClick(action.operation)}
-        />
-      ))}
-    </SpeedDial>
+    <>
+      <input
+        type="file"
+        id="file"
+        ref={inputFile}
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+      <SpeedDial
+        ariaLabel="SpeedDial tooltip example"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={() => handleClick(action.operation)}
+          />
+        ))}
+      </SpeedDial>
+    </>
   );
 };
 

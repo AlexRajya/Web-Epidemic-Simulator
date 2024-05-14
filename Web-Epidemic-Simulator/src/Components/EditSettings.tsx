@@ -34,6 +34,7 @@ const EditSettings: React.FC<IEditSettingsProps> = ({
 
   const handleClickOpen = () => {
     setOpenSettingsDialog(true);
+    setSettings(currentSettings);
   };
   const handleClose = () => {
     setOpenSettingsDialog(false);
