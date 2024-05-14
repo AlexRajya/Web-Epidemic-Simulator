@@ -1,5 +1,5 @@
 import { Cell } from "./Cell";
-import { Configuration } from "./Configuration";
+import { IConfiguration } from "./Configuration";
 
 import { ConvertTo2DArray } from "./Helpers/ConvertTo2DArray";
 import { IImmigrant } from "./IImmigrant";
@@ -211,7 +211,7 @@ export class Grid {
    * Simulates immigrations to neighbouring cells and large cities.
    * @param config - The configuration object for the simulation.
    */
-  SimImmigrations(config: Configuration) {
+  SimImmigrations(config: IConfiguration) {
     const randomCells = [];
     for (let i = 0; i < 25; i++) {
       const random = Math.floor(Math.random() * this.cellsCount);
@@ -283,7 +283,7 @@ export class Grid {
    * Steps the simulation forward by one day.
    * @param {Configuration} config - The configuration object for the simulation.
    */
-  Next(config: Configuration) {
+  Next(config: IConfiguration) {
     //Step the simulation forward (1 day)
     this.SimImmigrations(config);
     // Simulates natural deaths, deaths caused by the virus and new births.

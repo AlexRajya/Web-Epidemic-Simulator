@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Grid } from "./Simulation/Grid";
-import { Configuration } from "./Simulation/Configuration";
 import {
   ConvertTo2DArray,
   PickRandomCell,
@@ -13,6 +12,8 @@ import HeaderBar from "./Components/HeaderBar";
 import DropMenu from "./Components/DropMenu";
 import Footer from "./Components/Footer";
 import { Grid as GridComponent } from "@mui/material";
+import EditSettings from "./Components/EditSettings";
+import { IConfiguration, covid19 } from "./Simulation/Configuration";
 
 function App() {
   const cols = 36,
@@ -33,7 +34,7 @@ function App() {
   const [recoveredCount, setRecoveredCount] = useState<number>(
     grid.RecoveredOverallCount
   );
-  const [config] = useState<Configuration>(new Configuration());
+  const [config, setConfig] = useState<IConfiguration>(covid19);
   const [running, setRunning] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,6 +59,10 @@ function App() {
     setInfectedCount(newGrid.InfectedOverallCount);
     setIncubatedCount(newGrid.IncubatedOverallCount);
     setRecoveredCount(newGrid.RecoveredOverallCount);
+  };
+
+  const onConfigChange = (newConfig: IConfiguration) => {
+    setConfig(newConfig);
   };
 
   return (
@@ -112,6 +117,10 @@ function App() {
           >
             Reset
           </Button>
+          <EditSettings
+            onSettingsChange={onConfigChange}
+            currentSettings={config}
+          />
         </div>
       </GridComponent>
       <GridComponent item xs={12}>

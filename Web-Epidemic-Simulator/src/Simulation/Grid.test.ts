@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Grid } from "./Grid";
-import { Configuration, Preset } from "./Configuration";
+import { covid19 } from "./Configuration";
 
 describe("Grid", () => {
   describe("UpdateOverallCount", () => {
@@ -132,10 +132,9 @@ describe("Grid", () => {
   describe("SimImmigrations", () => {
     it("should simulate immigrations correctly", () => {
       const grid = new Grid(3, 3, [10, 20, 30, 40, 50000, 60, 70000, 80, 90]);
-      const config = new Configuration(Preset.COVID_19);
 
       // Call the method to simulate immigrations
-      grid.SimImmigrations(config);
+      grid.SimImmigrations(covid19);
 
       // Assert that the immigrants are added correctly
       expect(grid.immigrants.length).toBeGreaterThanOrEqual(57);
@@ -154,8 +153,8 @@ describe("Grid", () => {
     it("should return immigrants to their origin cells and clear the immigrants array", () => {
       const originalPopulations = [10, 20, 30, 40];
       const grid = new Grid(2, 2, originalPopulations);
-      const config = new Configuration(Preset.COVID_19);
-      grid.SimImmigrations(config);
+
+      grid.SimImmigrations(covid19);
       expect(grid.immigrants.length).toBe(12);
       expect(grid.cells[3].susAway).toBe(20);
 
@@ -189,24 +188,23 @@ describe("Grid", () => {
         vi.spyOn(cell, "SimInfections");
         vi.spyOn(cell, "SimRecoveries");
       });
-      const config = new Configuration(Preset.COVID_19);
 
       // Call the Next method to step the simulation forward
-      grid.Next(config);
+      grid.Next(covid19);
 
       // Assert that SimImmigrations is called
-      expect(simulateImmigrationsSpy).toHaveBeenCalledWith(config);
+      expect(simulateImmigrationsSpy).toHaveBeenCalledWith(covid19);
 
       // Assert that SimNaturalDeaths, SimVirusMorbidity, SimBirths, and SimInfections are called for each cell
       grid.cells.forEach((cell) => {
         expect(cell.SimNaturalDeaths).toHaveBeenCalledWith(
-          config.naturalDeathRate
+          covid19.naturalDeathRate
         );
         expect(cell.SimVirusMorbidity).toHaveBeenCalledWith(
-          config.ageDist,
-          config.ageMort
+          covid19.ageDist,
+          covid19.ageMort
         );
-        expect(cell.SimBirths).toHaveBeenCalledWith(config.birthRate);
+        expect(cell.SimBirths).toHaveBeenCalledWith(covid19.birthRate);
         expect(cell.SimInfections).toHaveBeenCalled();
       });
 
@@ -215,7 +213,7 @@ describe("Grid", () => {
 
       // Assert that SimRecoveries is called for each cell
       grid.cells.forEach((cell) => {
-        expect(cell.SimRecoveries).toHaveBeenCalledWith(config.infPeriod);
+        expect(cell.SimRecoveries).toHaveBeenCalledWith(covid19.infPeriod);
       });
 
       // Assert that UpdateOverallCount is called

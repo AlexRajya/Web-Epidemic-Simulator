@@ -4,11 +4,11 @@ import Popover from "@mui/material/Popover";
 import { Typography } from "@mui/material";
 import "./Cell.css";
 
-export interface CellProps {
+export interface ICellProps {
   cell: CellClass;
 }
 
-const Cell: React.FC<CellProps> = ({ cell }: CellProps) => {
+const Cell: React.FC<ICellProps> = ({ cell }: ICellProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
