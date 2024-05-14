@@ -153,7 +153,7 @@ function App() {
           </p>
         </div>
       </GridComponent>
-      <DropMenu />
+      <DropMenu configToExport={config} />
       <GridComponent item xs={12}>
         <Footer />
       </GridComponent>
