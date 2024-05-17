@@ -14,6 +14,7 @@ import Footer from "./Components/Footer";
 import { Grid as GridComponent } from "@mui/material";
 import EditSettings from "./Components/EditSettings";
 import { IConfiguration, covid19 } from "./Simulation/Configuration";
+import { LineChart } from "@mui/x-charts/LineChart";
 
 function App() {
   const cols = 36,
@@ -37,15 +38,22 @@ function App() {
   const [config, setConfig] = useState<IConfiguration>(covid19);
   const [running, setRunning] = useState<boolean>(false);
 
+  const [infectedHistory, setInfectedHistory] = useState<number[]>([]);
+  const [dayCount, setDayCount] = useState<number>(0);
+  const [daysList, setDaysList] = useState<number[]>([]);
+
   useEffect(() => {
     if (running) {
       const interval = setInterval(() => {
+        infectedHistory.push(grid.InfectedOverallCount);
+        daysList.push(dayCount);
         grid.Next(config);
+        setDayCount(dayCount + 1);
         updateCounts(grid);
       }, 100);
       return () => clearInterval(interval);
     }
-  }, [running, grid, config]);
+  }, [running, grid, config, infectedHistory, daysList, dayCount]);
 
   useEffect(() => {
     const startGrid = new Grid(rows, cols, cellsPopulation);
@@ -110,6 +118,10 @@ function App() {
             variant="contained"
             onClick={() => {
               const startGrid = new Grid(rows, cols, cellsPopulation);
+              setDayCount(0);
+              setDaysList([]);
+              setInfectedHistory([]);
+
               updateCounts(startGrid);
               setGrid(startGrid);
               startGrid.SetAsInfected(PickRandomCell(grid, cols, rows));
@@ -154,6 +166,31 @@ function App() {
         </div>
       </GridComponent>
       <DropMenu configToExport={config} onConfigImport={onConfigChange} />
+      <GridComponent item xs={12}>
+        <LineChart
+          xAxis={[
+            {
+              id: "Day",
+              data: daysList,
+              colorMap: {
+                type: "continuous",
+                color: ["red", "orange"],
+              },
+            },
+          ]}
+          series={[
+            {
+              data: infectedHistory,
+              area: true,
+            },
+          ]}
+          width={600}
+          height={400}
+          margin={{ left: 70 }}
+          grid={{ vertical: true, horizontal: true }}
+          skipAnimation
+        />
+      </GridComponent>
       <GridComponent item xs={12}>
         <Footer />
       </GridComponent>
