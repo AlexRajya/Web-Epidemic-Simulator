@@ -7,7 +7,7 @@ import {
 } from "./Simulation/Helpers/ConvertTo2DArray";
 import Cell from "./Components/Cell";
 import { cellsPopulation } from "./Simulation/Data/GermanyPopulationDensity";
-import { Button } from "@mui/material";
+import { Button, ThemeProvider, createTheme } from "@mui/material";
 import HeaderBar from "./Components/HeaderBar";
 import DropMenu from "./Components/DropMenu";
 import Footer from "./Components/Footer";
@@ -15,6 +15,12 @@ import { Grid as GridComponent } from "@mui/material";
 import EditSettings from "./Components/EditSettings";
 import { IConfiguration, covid19 } from "./Simulation/Configuration";
 import { LineChart } from "@mui/x-charts/LineChart";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
   const cols = 36,
@@ -165,32 +171,34 @@ function App() {
           </p>
         </div>
       </GridComponent>
-      <DropMenu configToExport={config} onConfigImport={onConfigChange} />
+
       <GridComponent item xs={12}>
-        <LineChart
-          xAxis={[
-            {
-              id: "Day",
-              data: daysList,
-              colorMap: {
-                type: "continuous",
-                color: ["red", "orange"],
+        <ThemeProvider theme={darkTheme}>
+          <LineChart
+            xAxis={[
+              {
+                id: "Day",
+                data: daysList,
+                colorMap: {
+                  type: "continuous",
+                  color: ["#f17575", "#f17575"],
+                },
               },
-            },
-          ]}
-          series={[
-            {
-              data: infectedHistory,
-              area: true,
-            },
-          ]}
-          width={600}
-          height={400}
-          margin={{ left: 70 }}
-          grid={{ vertical: true, horizontal: true }}
-          skipAnimation
-        />
+            ]}
+            series={[
+              {
+                data: infectedHistory,
+                area: true,
+              },
+            ]}
+            width={400}
+            height={200}
+            margin={{ left: 70 }}
+            grid={{ vertical: true, horizontal: true }}
+          />
+        </ThemeProvider>
       </GridComponent>
+      <DropMenu configToExport={config} onConfigImport={onConfigChange} />
       <GridComponent item xs={12}>
         <Footer />
       </GridComponent>
