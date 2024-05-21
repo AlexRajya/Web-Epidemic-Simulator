@@ -86,7 +86,7 @@ const DropMenu: React.FC<DropMenuProps> = ({
         onChange={handleFileChange}
       />
       <SpeedDial
-        ariaLabel="SpeedDial tooltip example"
+        ariaLabel="Extra actions"
         sx={{ position: "fixed", bottom: 16, right: 16 }}
         icon={<SpeedDialIcon />}
       >
