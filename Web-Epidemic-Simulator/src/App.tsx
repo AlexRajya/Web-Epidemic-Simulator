@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { Grid } from "./Simulation/Grid";
 import {
@@ -61,9 +61,9 @@ function App() {
     setRecoveredCount(newGrid.RecoveredOverallCount);
   };
 
-  const onConfigChange = (newConfig: IConfiguration) => {
+  const onConfigChange = useCallback((newConfig: IConfiguration) => {
     setConfig(newConfig);
-  };
+  }, []);
 
   return (
     <GridComponent
