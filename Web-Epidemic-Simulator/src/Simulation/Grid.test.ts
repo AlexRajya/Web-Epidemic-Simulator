@@ -3,6 +3,44 @@ import { Grid } from "./Grid";
 import { covid19 } from "./Configuration";
 
 describe("Grid", () => {
+  describe("constructor", () => {
+    it("should create a grid with the specified rows, columns, and cell populations", () => {
+      const rows = 2;
+      const cols = 2;
+      const cellsStartPopulations = [10, 20, 30, 60000];
+
+      const grid = new Grid(rows, cols, cellsStartPopulations);
+
+      expect(grid.rows).toBe(rows);
+      expect(grid.cols).toBe(cols);
+      expect(grid.cellsCount).toBe(rows * cols);
+
+      expect(grid.cells.length).toBe(cellsStartPopulations.length);
+      for (let i = 0; i < cellsStartPopulations.length; i++) {
+        expect(grid.cells[i].PopulationCount).toBe(cellsStartPopulations[i]);
+      }
+
+      expect(grid.nearestCities.length).toBe(cellsStartPopulations.length);
+      expect(grid.largeCities.length).toBeGreaterThan(0);
+
+      expect(grid.populationCount).toBeGreaterThan(0);
+      expect(grid.incubatedCount).toBeGreaterThanOrEqual(0);
+      expect(grid.infectedCount).toBeGreaterThanOrEqual(0);
+      expect(grid.recoveredCount).toBeGreaterThanOrEqual(0);
+      expect(grid.susceptibleCount).toBeGreaterThanOrEqual(0);
+    });
+
+    it("should throw a RangeError if the population data does not match the grid size", () => {
+      const rows = 2;
+      const cols = 2;
+      const cellsStartPopulations = [10, 20, 30]; // Incorrect population data
+
+      expect(() => new Grid(rows, cols, cellsStartPopulations)).toThrow(
+        RangeError
+      );
+    });
+  });
+
   describe("UpdateOverallCount", () => {
     it("should update the overall counts correctly", () => {
       const grid = new Grid(2, 2, [10, 20, 30, 40]);

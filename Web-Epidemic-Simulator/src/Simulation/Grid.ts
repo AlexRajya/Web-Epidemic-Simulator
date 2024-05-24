@@ -27,7 +27,7 @@ export class Grid {
     this.rows = rows;
     this.cols = cols;
     if (cellsStartPopulations.length != this.cellsCount)
-      throw new Error("Invalid population data provided");
+      throw new RangeError("Population data does not match grid size.");
 
     this.cells = new Array(this.cellsCount);
     // Assign population to each cell
