@@ -11,10 +11,10 @@ import {
 import CoronavirusIcon from "@mui/icons-material/Coronavirus";
 import InfoIcon from "@mui/icons-material/Info";
 import CloseIcon from "@mui/icons-material/Close";
-import React from "react";
+import React, { memo } from "react";
 import "./HeaderBar.css";
 
-const HeaderBar: React.FC = () => {
+const HeaderBar: React.FC = memo(() => {
   const [openAboutDialog, setOpenAboutDialog] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -95,6 +95,6 @@ const HeaderBar: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default HeaderBar;
